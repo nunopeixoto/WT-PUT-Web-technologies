@@ -56,7 +56,7 @@
           })
           // this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setUser', response.data.user)
-          this.success = 'Nice'
+          this.success = 'Your account was registered successfully. Please verify your e-mail.'
         } catch (error) {
           this.success = null
           this.error = error.response.data.error

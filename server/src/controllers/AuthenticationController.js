@@ -1,10 +1,7 @@
 const {User} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
-//const _ = require('lodash')
 const nodemailer = require('nodemailer')
-// const EMAIL_SECRET = 'asdf1093KMnzxcvnkljvasdu09123nlasdasdf'
-//const models = ('../models')
 const jwt_decode = require('jwt-decode')
 
 function jwtSignUser(user) {
@@ -18,8 +15,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   port: 465,
   auth: {
-    user: 'peixotobife@gmail.com',
-    pass: 'Keralhoo'
+    user: 'peixotobusiness@gmail.com',
+    pass: 'webtech123'
   },
   tls: {
     rejectUnauthorized: false
@@ -109,20 +106,12 @@ module.exports = {
   async validate(req, res) {
     try {
       var token = req.params.token
-      //console.log('TOKEN: '+token)
-      //console.log('PILAAAA'+req.params.token)
-      console.log('EHYEWQEWQYEWQ8EWQEWQIEQWHIEJQEWIHEQ')
-      
       var id = jwt_decode(token).id
-      console.log(id)
-      // const { user: { id } }
-     // console.log('CENASSSSSSSSSSSSSSS'+jwt.verify(req.params.token, EMAIL_SECRET))
     await User.update({ confirmed: true }, { where: { id } })
-            console.log({ user: {id}})
     return res.redirect('http://localhost:8080/#/login')
     } catch (err) {
       res.status(500).send({
-        error: 'An error has occured trying to validate'
+        error: 'An error has occured trying to validate your account.'
       })
     }
   }
