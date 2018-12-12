@@ -18,8 +18,8 @@ const transporter = nodemailer.createTransport({
   secure: false,
   port: 465,
   auth: {
-    user: 'peixotobife@gmail.com',
-    pass: 'Keralhoo'
+    user: 'peixotobusiness@gmail.com',
+    pass: 'webtech123'
   },
   tls: {
     rejectUnauthorized: false
@@ -42,7 +42,7 @@ module.exports = {
       const url = `http://localhost:8081/confirmation/${token}`
 
       let HelperOptions = {
-        from: '"CompanyName" peixotobife@gmail.com',
+        from: '"CompanyName" peixotobusiness@gmail.com',
         to: req.body.email,
         subject: 'Account validation',
         html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
