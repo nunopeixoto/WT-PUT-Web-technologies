@@ -39,7 +39,7 @@ module.exports = {
       const url = `http://localhost:8081/confirmation/${token}`
 
       let HelperOptions = {
-        from: '"CompanyName" peixotobife@gmail.com',
+        from: '"CompanyName" peixotobusiness@gmail.com',
         to: req.body.email,
         subject: 'Account validation',
         html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
