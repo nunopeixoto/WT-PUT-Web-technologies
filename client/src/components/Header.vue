@@ -10,18 +10,14 @@
       </span> 
     </v-toolbar-title>
     <v-toolbar-items>
-        <v-btn v-if="$store.state.isUserLoggedIn" flat dark router to='createlibrary'>
+        <v-btn v-if="$store.state.isUserLoggedIn && !$store.state.userHasLibrary" flat dark router to='createlibrary'>
           Create library
         </v-btn>
-      </v-toolbar-items>
-    <v-toolbar-items>
         <v-btn v-if="$store.state.isUserLoggedIn" flat dark router to='newbook'>
           New book
         </v-btn>
-      </v-toolbar-items>
-  
+       </v-toolbar-items>
     <v-spacer></v-spacer>
-  
     <v-toolbar-items>
       <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to='login'>
         Login

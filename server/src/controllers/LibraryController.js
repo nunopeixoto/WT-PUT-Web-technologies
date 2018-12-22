@@ -16,11 +16,10 @@ module.exports = {
      const library = await Library.create(req.body)
      res.send(library)
     } catch (err) {
+      console.log(err)
       res.status(500).send({
         error: 'An error has occured trying to create a library'
       })
     }
   }
-
-  
 }

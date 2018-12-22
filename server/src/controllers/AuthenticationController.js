@@ -1,4 +1,5 @@
 const {User} = require('../models')
+const {Library} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 const nodemailer = require('nodemailer')
@@ -101,11 +102,22 @@ module.exports = {
           error: 'You need to verify email.'
         })
       }
-
+      
+      //boolean to check if user loggin in already has created one library
+      const hasLibrary = await Library.findOne({
+        where: {
+          UserId: user.id
+        }
+      })
+      var userHasLibrary = false
+      if (hasLibrary){
+        userHasLibrary = true
+      }
       const userJson = user.toJSON()
       res.send({
         user: userJson,
-        token: jwtSignUser(userJson)
+        token: jwtSignUser(userJson),
+        userHasLibrary: userHasLibrary
       })
     } catch (err) {
       res.status(500).send({

@@ -13,6 +13,8 @@
           <v-flex xs12 sm6 md12>
             <form name="create-library-form" autocomplete="off">
               <v-text-field label="Library name"  required :rules="[required]" v-model="library.name"></v-text-field>
+             
+
               <br> 
             </form>
             <br>
@@ -50,12 +52,18 @@
 
 <script>
   import LibraryService from '@/services/LibraryService'
+  import {mapState} from 'vuex'
   export default {
+      computed: {
+        ...mapState([
+          'user'
+        ])
+      },
       data() {
         return {
           library: {
-            iduser: 12,
-            name: null
+            name: null,
+            UserId: this.$store.state.user.id,
           },
           error: null,
           success: null,
@@ -75,14 +83,16 @@
               this.dialog = false
               return
             }
-            await LibraryService.create(this.library)
+            const response = await LibraryService.create(this.library)
+            this.$store.dispatch('setLibrary', response.data)
+            this.$store.dispatch('setHasLibrary', true)
             this.dialog = false
             
             this.$router.push({
               name: 'dashboard'
             })
           } catch (error) {
-            // alert(error)
+            alert(error)
             this.success = null
             this.error = 'Some error happened. Please try again.'
             this.dialog = false

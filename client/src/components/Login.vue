@@ -35,6 +35,7 @@
 
 <script>
   import AuthenticationService from '@/services/AuthenticationService'
+  import LibraryService from '@/services/LibraryService'
   export default {
     data() {
       return {
@@ -53,9 +54,16 @@
             username: this.username,
             password: this.password
           })
+          const userid = response.data.user.id
           this.success = 'Logged in successfully.'
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setUser', response.data.user)
+          if(response.data.userHasLibrary){
+          this.$store.dispatch('setHasLibrary', true)
+          } else {
+          this.$store.dispatch('setHasLibrary', false)  
+          }
+          
           this.$router.push({
             name: 'root'
           })
@@ -63,6 +71,14 @@
           this.success = null
           this.error = error.response.data.error
         }
+        // try {
+        //   const userHasLibrary = (await LibraryService.checkHasLibrary({
+        //       userId: userid
+        //     })).data
+        //   alert(userHasLibrary)
+        // }catch (err){
+        //   alert(err)
+        // }
       }
     }
   }

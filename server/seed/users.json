@@ -1,0 +1,14 @@
+[
+    {
+        "email": "nuno_peixoto1997@hotmail.com",
+        "username": "nunopeixoto",
+        "password": "12345678",
+        "confirmed": true
+    },
+    {
+        "email": "peixotobife@gmail.com",
+        "username": "peixotobife",
+        "password": "12345678",
+        "confirmed": true
+    }
+]
