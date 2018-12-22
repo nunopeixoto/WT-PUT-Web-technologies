@@ -12,9 +12,9 @@
   
           <v-flex xs12 sm6 md12>
             <form name="auth-form" autocomplete="off">
-              <v-text-field label="Email" required :rules="[required]" v-model="email" ></v-text-field>
+              <v-text-field label="Username" required :rules="[required]" v-model="username" ></v-text-field>
               <br>
-              <v-text-field label="Password" required :rules="[required]" type="password" v-model="password" value="12345678"></v-text-field>
+              <v-text-field label="Password" required :rules="[required]" type="password" v-model="password"></v-text-field>
               <br>
               <v-alert v-if="success" :value="true" type="success">
               {{success}}.
@@ -38,7 +38,7 @@
   export default {
     data() {
       return {
-        email: '',
+        username: '',
         password: '',
         error: null,
         success: null,
@@ -50,7 +50,7 @@
         try {
           this.error = null
           const response = await AuthenticationService.login({
-            email: this.email,
+            username: this.username,
             password: this.password
           })
           this.success = 'Logged in successfully.'

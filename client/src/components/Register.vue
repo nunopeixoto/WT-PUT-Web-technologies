@@ -14,6 +14,8 @@
             <form name="auth-form" autocomplete="off">
               <v-text-field label="Email" required :rules="[required]" v-model="email"></v-text-field>
               <br>
+              <v-text-field label="Username" required :rules="[required]" type="text" v-model="username"></v-text-field>
+              <br>
               <v-text-field label="Password" required :rules="[required]" type="password" v-model="password" autocomplete="new-password"></v-text-field>
             </form>
             <br>
@@ -42,6 +44,7 @@
       return {
         email: '',
         password: '',
+        username: '',
         error: null,
         success: null,
         required: (value) => !!value || 'Required.'
@@ -53,6 +56,7 @@
           this.error = null
           const response = await AuthenticationService.register({
             email: this.email,
+            username: this.username,
             password: this.password
           })
           // this.$store.dispatch('setTokegitn', response.data.token)

@@ -25,6 +25,16 @@ const transporter = nodemailer.createTransport({
 
 
 module.exports = {
+  async getAllUsers(req, res) {
+    try {
+      const allUsers = await User.findAll()
+      res.send(allUsers)
+    } catch (err) {
+      res.status(400).send({
+        error: 'Error listing librarys'
+      })
+    }
+  },
   async register(req, res) {
     try {
       const user = await User.create(req.body)
@@ -48,7 +58,7 @@ module.exports = {
 
           transporter.sendMail(HelperOptions, (error, info) => {
             if (error){
-              return console.log('PILAAAAAAAAAA'+error)
+              return console.log(error)
             }
             console.log('message send')
             console.log(info)
@@ -63,12 +73,12 @@ module.exports = {
   async login(req, res) {
     try {
       const {
-        email,
+        username,
         password
       } = req.body
       const user = await User.findOne({
         where: {
-          email: email
+          username: username
         }
       })
 
@@ -81,14 +91,14 @@ module.exports = {
       const isPasswordValid = await user.comparePassword(password)
       if (!isPasswordValid) {
         return res.status(403).send({
-          error: 'The login information was incorrect'
+          error: 'The login information was incorrect.'
         })
       }
 
       const isEmailConfirmed = user.confirmed
       if (!isEmailConfirmed) {
         return res.status(403).send({
-          error: 'You need to verify email'
+          error: 'You need to verify email.'
         })
       }
 
