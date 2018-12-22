@@ -2,27 +2,37 @@
 <template>
   <v-toolbar fixed class="cyan" dark>
     <v-toolbar-title class="mr-4">
-      <span class="home" @click="navigateTo({name: 'root'})">
-          TabTracker
-        </span>
+      <span v-if="!$store.state.isUserLoggedIn" class="home" @click="navigateTo({name: 'root'})">
+          myLibrary
+      </span>
+      <span v-if="$store.state.isUserLoggedIn" class="home" @click="navigateTo({name: 'dashboard'})">
+          myLibrary
+      </span> 
     </v-toolbar-title>
-  
-    <!-- TODO: Implement Me -->
-    <!-- <v-toolbar-items>
-        <v-btn flat dark>
-          Browse
+    <v-toolbar-items>
+        <v-btn v-if="$store.state.isUserLoggedIn" flat dark router to='createlibrary'>
+          Create library
         </v-btn>
-      </v-toolbar-items> -->
+      </v-toolbar-items>
+    <v-toolbar-items>
+        <v-btn v-if="$store.state.isUserLoggedIn" flat dark router to='newbook'>
+          New book
+        </v-btn>
+      </v-toolbar-items>
   
     <v-spacer></v-spacer>
   
     <v-toolbar-items>
-      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark @click="navigateTo({name: 'login'})">
+      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to='login'>
         Login
       </v-btn>
   
-      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark @click="navigateTo({name: 'register'})">
+      <v-btn v-if="!$store.state.isUserLoggedIn" flat dark router to='register'>
         Sign Up
+      </v-btn>
+
+      <v-btn v-if="$store.state.isUserLoggedIn" flat dark @click="logout">
+        Log out
       </v-btn>
     </v-toolbar-items>
   </v-toolbar>
@@ -33,6 +43,13 @@
     methods: {
       navigateTo(route) {
         this.$router.push(route)
+      },
+      logout(){
+        this.$store.dispatch('setToken', null)
+        this.$store.dispatch('setUser', null)
+        this.$router.push({
+          name: 'root'
+        })
       }
     }
   }

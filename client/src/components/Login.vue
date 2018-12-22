@@ -11,10 +11,10 @@
           </v-toolbar>
   
           <v-flex xs12 sm6 md12>
-            <form name="tab-tracker-form" autocomplete="off">
-              <v-text-field label="Email" v-model="email"></v-text-field>
+            <form name="auth-form" autocomplete="off">
+              <v-text-field label="Email" required :rules="[required]" v-model="email" ></v-text-field>
               <br>
-              <v-text-field label="Password" type="password" v-model="password"></v-text-field>
+              <v-text-field label="Password" required :rules="[required]" type="password" v-model="password" value="12345678"></v-text-field>
               <br>
               <v-alert v-if="success" :value="true" type="success">
               {{success}}.
@@ -41,7 +41,8 @@
         email: '',
         password: '',
         error: null,
-        success: null
+        success: null,
+        required: (value) => !!value || 'Required.'
       }
     },
     methods: {
@@ -55,6 +56,9 @@
           this.success = 'Logged in successfully.'
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setUser', response.data.user)
+          this.$router.push({
+            name: 'root'
+          })
         } catch (error) {
           this.success = null
           this.error = error.response.data.error
@@ -66,3 +70,4 @@
 
 <style scoped>
 </style>
+
