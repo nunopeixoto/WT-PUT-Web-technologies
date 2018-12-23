@@ -1,12 +1,14 @@
 const {
     sequelize,
     User,
-    Library
+    Library,
+    LibraryInvitations,
 } = require('../src/models')
 
 const Promise = require('bluebird')
 const users = require('./users.json')
 const librarys = require('./librarys.json')
+const libraryinvitations = require('./libraryinvitations.json')
 
 sequelize.sync({force: true})
   .then(async function () {
@@ -21,4 +23,10 @@ sequelize.sync({force: true})
         Library.create(library)
       })
     )
+
+    await Promise.all(
+      libraryinvitations.map(libraryinvitation => {
+        LibraryInvitations.create(libraryinvitation)
+    })
+  )
   })
