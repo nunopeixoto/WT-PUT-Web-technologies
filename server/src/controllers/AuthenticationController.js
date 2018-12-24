@@ -71,6 +71,22 @@ module.exports = {
       })
     }
   },
+  async enhancedregister(req, res) {
+    try {
+      const user = await User.create(req.body)
+      const userJson = user.toJSON()
+      const token = jwtSignUser(userJson)
+      //console.log('TOKENNNNNNNNNNNNNNNNNN:'+ token)
+      res.send({
+        user: userJson,
+        token: token
+      })
+    } catch (err) {
+      res.status(400).send({
+        error: 'This email account is already in use.'
+      })
+    }
+  },
   async login(req, res) {
     try {
       const {
@@ -104,19 +120,20 @@ module.exports = {
       }
       
       //boolean to check if user loggin in already has created one library
-      const hasLibrary = await Library.findOne({
+      const library = await Library.findOne({
         where: {
           UserId: user.id
         }
       })
       var userHasLibrary = false
-      if (hasLibrary){
+      if (library){
         userHasLibrary = true
       }
       const userJson = user.toJSON()
       res.send({
         user: userJson,
         token: jwtSignUser(userJson),
+        library: library,
         userHasLibrary: userHasLibrary
       })
     } catch (err) {

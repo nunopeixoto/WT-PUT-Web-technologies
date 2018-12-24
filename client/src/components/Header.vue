@@ -13,7 +13,10 @@
         <v-btn v-if="$store.state.isUserLoggedIn && !$store.state.userHasLibrary" flat dark router to='createlibrary'>
           Create library
         </v-btn>
-        <v-btn v-if="$store.state.isUserLoggedIn" flat dark router to='newbook'>
+        <v-btn v-if="$store.state.isUserLoggedIn  && $store.state.userHasLibrary" flat dark router to='managelibrary'>
+          Manage library
+        </v-btn>
+        <v-btn v-if="$store.state.isUserLoggedIn  && $store.state.userHasLibrary" flat dark router to='newbook'>
           New book
         </v-btn>
        </v-toolbar-items>
@@ -43,6 +46,8 @@
       logout(){
         this.$store.dispatch('setToken', null)
         this.$store.dispatch('setUser', null)
+        this.$store.dispatch('setHasLibrary', null)
+        this.$store.dispatch('setLibrary', null)
         this.$router.push({
           name: 'root'
         })

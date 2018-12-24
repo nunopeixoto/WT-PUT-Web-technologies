@@ -6,6 +6,8 @@ import Register from '@/components/Register'
 import Login from '@/components/Login'
 import CreateLibrary from '@/components/CreateLibrary'
 import NewBook from '@/components/NewBook'
+import ManageLibrary from '@/components/ManageLibrary'
+import RegisterEnhanced from '@/components/RegisterEnhanced'
 
 Vue.use(Router)
 
@@ -27,6 +29,11 @@ export default new Router({
       component: Register
     },
     {
+      path: '/registerenhanced/:email/:libraryId',
+      name: 'registerenhanced',
+      component: RegisterEnhanced
+    },
+    {
       path: '/login',
       name: 'login',
       component: Login
@@ -40,6 +47,11 @@ export default new Router({
       path: '/newbook',
       name: 'newbook',
       component: NewBook
+    },
+    {
+      path: '/managelibrary',
+      name: 'managelibrary',
+      component: ManageLibrary
     }
   ]
 })

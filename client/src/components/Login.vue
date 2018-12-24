@@ -60,12 +60,13 @@
           this.$store.dispatch('setUser', response.data.user)
           if(response.data.userHasLibrary){
           this.$store.dispatch('setHasLibrary', true)
+          this.$store.dispatch('setLibrary', response.data.library)
           } else {
           this.$store.dispatch('setHasLibrary', false)  
           }
           
           this.$router.push({
-            name: 'root'
+            name: 'dashboard'
           })
         } catch (error) {
           this.success = null
