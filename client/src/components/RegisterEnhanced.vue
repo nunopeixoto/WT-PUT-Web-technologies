@@ -44,8 +44,8 @@
     data() {
       return {
         email: this.$route.params.email,
-        password: '',
-        username: '',
+        password: null,
+        username: null,
         confirmed: true,
         error: null,
         success: null,
@@ -57,20 +57,25 @@
         try {
           this.error = null
           const response = await AuthenticationService.enhancedregister({
-            email: this.$route.params.email,
+            email: this.email,
             username: this.username,
             password: this.password,
             confirmed : true
           })
-
          await LibraryService.becomeLibraryGuest(this.$route.params.email, this.$route.params.libraryId)
           // this.$store.dispatch('setTokegitn', response.data.token)
           //this.$store.dispatch('setUser', response.data.user)
-          this.success = 'Your account was registered successfully.'
+          this.success = 'Your account was registered successfully'
+          this.$router.push({
+            name: 'login'
+          })
         } catch (error) {
-        alert(error)
           this.success = null
+          if(error.response.data.error){
           this.error = error.response.data.error
+          }else{
+            this.error = 'Error'
+          }
         }
       }
     }

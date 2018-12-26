@@ -46,6 +46,13 @@
         required: (value) => !!value || 'Required.'
       }
     },
+    async mounted () {
+      this.$store.dispatch('setToken', null)
+      this.$store.dispatch('setUser', null)
+      this.$store.dispatch('setHasLibrary', null)
+      this.$store.dispatch('setIsPartOfLibrary', null)
+      this.$store.dispatch('setLibrary', null)
+    },
     methods: {
       async login() {
         try {
@@ -61,16 +68,20 @@
           if(response.data.userHasLibrary){
           this.$store.dispatch('setHasLibrary', true)
           this.$store.dispatch('setLibrary', response.data.library)
-          } else {
+          } else if(response.data.userIsPartOfLibrary) {
+          this.$store.dispatch('setIsPartOfLibrary', true)
+          this.$store.dispatch('setLibrary', response.data.library)
+          }else{
           this.$store.dispatch('setHasLibrary', false)  
+          this.$store.dispatch('setIsPartOfLibrary', false) 
           }
           
           this.$router.push({
-            name: 'dashboard'
+            name: 'root'
           })
         } catch (error) {
           this.success = null
-          this.error = error.response.data.error
+          this.error = "hey"+error.response.data.error
         }
         // try {
         //   const userHasLibrary = (await LibraryService.checkHasLibrary({

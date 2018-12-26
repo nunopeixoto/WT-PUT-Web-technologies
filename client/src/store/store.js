@@ -15,7 +15,9 @@ export default new Vuex.Store({
     isUserLoggedIn: false,
     hasLibrary: null,
     library: null,
-    userHasLibrary: false
+    userHasLibrary: false,
+    isPartOfLibrary: null,
+    userIsPartOfLibrary: false
   },
   mutations: {
     setToken (state, token) {
@@ -37,6 +39,14 @@ export default new Vuex.Store({
         state.userHasLibrary = false
       }
     },
+    setIsPartOfLibrary (state, isPartOfLibrary) {
+      state.isPartOfLibrary = isPartOfLibrary
+      if (isPartOfLibrary) {
+        state.userIsPartOfLibrary = true
+      } else {
+        state.userIsPartOfLibrary = false
+      }
+    },
     setLibrary (state, library) {
       state.library = library
     }
@@ -50,6 +60,9 @@ export default new Vuex.Store({
     },
     setHasLibrary ({commit}, hasLibrary) {
       commit('setHasLibrary', hasLibrary)
+    },
+    setIsPartOfLibrary ({commit}, isPartOfLibrary) {
+      commit('setIsPartOfLibrary', isPartOfLibrary)
     },
     setLibrary ({commit}, library) {
       commit('setLibrary', library)

@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
             foreignKey: 'UserId',
             through: LibraryInvitations
         }),
-        models.Library.belongsTo(models.User, {
+        models.Library.belongsToMany(models.User, {
             as: 'Library',
             foreignKey: 'LibraryId',
             through: LibraryInvitations

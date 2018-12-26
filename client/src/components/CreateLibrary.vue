@@ -89,7 +89,7 @@
             this.dialog = false
             
             this.$router.push({
-              name: 'dashboard'
+              name: 'root'
             })
           } catch (error) {
             alert(error)

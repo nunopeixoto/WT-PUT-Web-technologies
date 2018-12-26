@@ -10,5 +10,11 @@
         "username": "peixotobife",
         "password": "12345678",
         "confirmed": true
+    },
+    {
+        "email": "mt2portugalia@outlook.com",
+        "username": "mt2portugalia",
+        "password": "12345678",
+        "confirmed": true
     }
 ]

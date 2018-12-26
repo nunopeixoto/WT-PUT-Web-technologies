@@ -1,5 +1,6 @@
 const {User} = require('../models')
 const {Library} = require('../models')
+const {LibraryInvitations} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 const nodemailer = require('nodemailer')
@@ -76,7 +77,6 @@ module.exports = {
       const user = await User.create(req.body)
       const userJson = user.toJSON()
       const token = jwtSignUser(userJson)
-      //console.log('TOKENNNNNNNNNNNNNNNNNN:'+ token)
       res.send({
         user: userJson,
         token: token
@@ -119,8 +119,8 @@ module.exports = {
         })
       }
       
-      //boolean to check if user loggin in already has created one library
-      const library = await Library.findOne({
+      //boolean to check if user trying to log in already has created one library
+      var library = await Library.findOne({
         where: {
           UserId: user.id
         }
@@ -128,15 +128,35 @@ module.exports = {
       var userHasLibrary = false
       if (library){
         userHasLibrary = true
+      }else{
+       //boolean to check if user trying to log in is already a member of one library
+       const libraryInvitation = await LibraryInvitations.findOne({
+        where: {
+          UserId: user.id
+        }
+      })
+      if(libraryInvitation){
+        library = await Library.findOne({
+          where : {
+            id: libraryInvitation.LibraryId
+          }
+        })
       }
+      var userIsPartOfLibrary = false
+      if (library){
+        userIsPartOfLibrary = true
+      }
+    }
       const userJson = user.toJSON()
       res.send({
         user: userJson,
         token: jwtSignUser(userJson),
         library: library,
-        userHasLibrary: userHasLibrary
+        userHasLibrary: userHasLibrary,
+        userIsPartOfLibrary : userIsPartOfLibrary
       })
     } catch (err) {
+      console.log('AQUIQWUQIQWUEQWIEQWUQWEUEQU'+err)
       res.status(500).send({
         error: 'An error has occured trying to log in'
       })

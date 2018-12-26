@@ -93,32 +93,35 @@ module.exports = {
      if(userExists){
         const userJson = userExists.toJSON()
         //verify on libraryInvitations table 
-        const userAlreadyHasLibrary = await LibraryInvitations.findOne({
+        console.log('111111111111111111111111111111111111111111')
+        const userAlreadyInLibrary = await LibraryInvitations.findOne({
           where : {
             UserId : userJson.id
           }
         })
-        if (userAlreadyHasLibrary){
+        const userIsOwnerOfLibrary = await Library.findOne({
+          where : {
+            UserId : userJson.id
+          }
+        })
+        console.log('222222222222222222222222222222222222222222')
+        if (userAlreadyInLibrary || userIsOwnerOfLibrary){
+          console.log('33333333333333333333333333333333333333333333333333333')
           return res.redirect('http://localhost:8080/#/login')
         } else {
-            //verify on library table if user is owner of some library
-            
-            const userIsOwnerOfLibrary = await Library.findOne({
-              where : {
-                UserId : userJson.id
-              }
-            })
-            if(userIsOwnerOfLibrary){
-              return res.redirect('http://localhost:8080/#/login')
-            } else{
-              await LibraryInvitations.create({
-                UserId : userJson.id,
-                LibraryId : req.params.libraryId
-              })
-              return res.redirect('http://localhost:8080/#/login')
+          console.log('44444444444444444444444444444444444444')
+          await LibraryInvitations.create({
+            UserId : userJson.id,
+            LibraryId : req.params.libraryId
+          })
+          console.log('555555555555555555555555555555555555555555555555')
+          return res.redirect('http://localhost:8080/#/login')
+
             }
         }
-      } else {
+       else {
+        console.log('666666666666666666666666666666666666666666666666')
+        res.setHeader('Access-Control-Allow-Origin', '*')
         return res.redirect(`http://localhost:8080/#/registerenhanced/${req.params.email}/${req.params.libraryId}`)
       }
     } catch (err) {
