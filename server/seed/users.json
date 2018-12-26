@@ -16,5 +16,11 @@
         "username": "mt2portugalia",
         "password": "12345678",
         "confirmed": true
+    },
+    {
+        "email": "213",
+        "username": "test",
+        "password": "12345678",
+        "confirmed": true
     }
 ]

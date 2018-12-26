@@ -7,15 +7,21 @@
       <v-layout row wrap>
         <v-flex xs6 offset-xs3>
           <v-toolbar flat dense class="blue" dark>
-            <v-toolbar-title white>Create your own library</v-toolbar-title>
+            <v-toolbar-title white>Add a new</v-toolbar-title>
           </v-toolbar>
-  
-          <v-flex xs12 sm6 md12>
-            <form name="create-library-form" autocomplete="off">
-              <v-text-field label="Library name"  required :rules="[required]" v-model="library.name"></v-text-field>
+              <v-text-field label="Title"  required :rules="[required]" v-model="book.title"></v-text-field>
+              <v-text-field label="Subtitle"  v-model="book.subtitle"></v-text-field>
+              <v-text-field label="Authors"  required :rules="[required]" v-model="book.authors"></v-text-field>
+              <v-flex xs12 sm6 md4>
+                <v-menu :close-on-content-click="false" v-model="datepicker" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
+                  <v-text-field slot="activator" v-model="book.publishDate" label="Publish date" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker v-model="book.publishDate" @input="datepicker = false"></v-date-picker>
+                </v-menu>
+              </v-flex>
+              <v-text-field label="Number of pages" type="number" required :rules="[required]"  v-model="book.nrPages"></v-text-field>
+              <v-text-field label="Publisher"  v-model="book.publisher"></v-text-field>
+              <v-text-field label="Language" required :rules="[required]"  v-model="book.language"></v-text-field>
               <br> 
-              <v-text-field label="cENAS name"  required :rules="[required]" v-model="cenas.cenas" ></v-text-field>
-            </form>
             <br>
             <!-- <div class="error" v-html="error" /> -->
             <v-alert v-if="success" :value="true" type="success">
@@ -26,20 +32,19 @@
             </v-alert>
             <br>
             <v-btn dark class="cyan" @click="dialog = true">
-              Create library
+              Submit
             </v-btn>
           </v-flex>
-          
-        </v-flex>
+         
       </v-layout>
         <v-layout row justify-center>
       <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>
           <v-card-title class="headline">Warning</v-card-title>
-          <v-card-text>Are you sure you want to create {{library.name}} library?</v-card-text>
+          <v-card-text>Are you sure you want to add {{book.title}} to your library?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="createLibrary">Yes</v-btn>
+            <v-btn color="green darken-1" flat @click="createBook">Yes</v-btn>
             <v-btn color="green darken-1" flat @click="dialog = false">No</v-btn>
           </v-card-actions>
         </v-card>
@@ -50,33 +55,52 @@
 </template>
 
 <script>
-  import LibraryService from '@/services/LibraryService'
+  import BookService from '@/services/BookService'
+  import PersonalReadingService from '@/services/PersonalReadingService'
   export default {
       data() {
         return {
-          library: {
-            iduser: 12,
-            name: null
+          
+          book: {
+            title: null,
+            subtitle: null,
+            authors: null,
+            publishDate: null,
+            nrPages: null,
+            publisher: null,
+            language: null
           },
           error: null,
           success: null,
-          dialog: false
+          dialog: false,
+          datepicker : false,
+          required: (value) => !!value || 'Required.'
         }
       },
       methods: {
-        async createLibrary() {
+        async createBook() {
+          this.error = null
+          const areAllFieldsFilledIn = Object
+            .keys(this.book)
+            .every(key => !!this.book[key])
+            if (!areAllFieldsFilledIn){
+              this.error= 'Please fill all the required fields'
+              this.dialog = false
+              return
+            }
           try {
-            this.error = null
-            await LibraryService.create(this.library)
-            this.dialog = true
-            alert('hi')
-            this.$router.push({
-              name: 'root'
+            const response = await BookService.createBook(this.book)
+            await PersonalReadingService.createPersonalReading({
+              LibraryId : this.$store.state.library.id,
+              UserId : this.$store.state.user.id,
+              BookId : response.data.id
             })
+            this.success = `${this.book.title} added to your library`
+            this.dialog = false
           } catch (error) {
-            alert(error)
             this.success = null
-            this.error = 'error'
+            this.dialog = false
+            this.error = error.response.data.error
           }
         }
       },

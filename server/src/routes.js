@@ -2,12 +2,14 @@ const AuthenticationController = require('./controllers/AuthenticationController
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
 const LibraryController = require('./controllers/LibraryController')
 const LibraryInvitationsController = require('./controllers/LibraryInvitationsController')
+const BookController = require('./controllers/BookController')
+const PersonalReadingController = require('./controllers/PersonalReadingController')
 
 module.exports = (app) => {
   app.post('/register',
     AuthenticationControllerPolicy.register,
     AuthenticationController.register)
-    app.post('/enhancedregister',
+  app.post('/enhancedregister',
     AuthenticationControllerPolicy.register,
     AuthenticationController.enhancedregister)
   app.get('/getAllUsers',
@@ -30,5 +32,15 @@ module.exports = (app) => {
 
   app.get('/getAllLibraryInvitations',
   LibraryInvitationsController.getAllLibraryInvitations)
+
+  app.get('/books/getAllBooks',
+  BookController.getAllBooks)
+  app.post('/books/newbook',
+  BookController.newBook)
+
+  app.get('/personalReading/getAllPersonalReading',
+  PersonalReadingController.getAllPersonalReading)
+  app.post('/personalReading/newPersonalReading',
+  PersonalReadingController.newPersonalReading)
   
 }
