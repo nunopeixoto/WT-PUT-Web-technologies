@@ -13,8 +13,8 @@
         <v-btn v-if="$store.state.isUserLoggedIn  && $store.state.userHasLibrary" flat dark router to='managelibrary'>
           Manage library
         </v-btn>
-        <v-menu offset-y>
-        <v-btn v-if="$store.state.isUserLoggedIn" slot="activator" flat dark>
+        <v-menu v-if="$store.state.library">
+        <v-btn slot="activator" flat dark>
           New book
         </v-btn>
         <v-list>
@@ -95,6 +95,13 @@ import {mapState} from 'vuex'
         // alert(libraryName)
         const response = await LibraryService.getLibraryByName(libraryName)
         this.$store.dispatch('setLibrary', response.data)
+        if (this.$store.state.user.id == response.data.UserId){
+          this.$store.dispatch('setIsPartOfLibrary', false)
+          this.$store.dispatch('setHasLibrary', true)
+        } else {
+          this.$store.dispatch('setIsPartOfLibrary', true)
+          this.$store.dispatch('setHasLibrary', false)
+        }
       }
     },
     watch : {

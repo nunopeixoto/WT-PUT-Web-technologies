@@ -6,6 +6,8 @@
     <v-container>
       <v-layout row wrap>
         <v-flex xs6 offset-xs3>
+            <h2> You are adding a new book to {{$store.state.library.name}} </h2>
+            <br>
           <v-toolbar flat dense class="blue" dark>
             <v-toolbar-title white>Add a new</v-toolbar-title>
           </v-toolbar>
