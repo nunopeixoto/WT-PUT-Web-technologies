@@ -1,3 +1,4 @@
+/* eslint-disable */
 const {Library} = require('../models')
 const {User} = require('../models')
 const {LibraryInvitations} = require('../models')
@@ -79,6 +80,43 @@ module.exports = {
       })
     }
   },
+  async getUserLibrarys(req, res){
+    try{
+      const Sequelize = require('sequelize')
+      const config = require('../config/config')
+      const userId = req.params.userId
+      const sequelize = new Sequelize(
+        config.db.database,
+        config.db.user,
+        config.db.password,
+        config.db.options
+      )
+      sequelize.query(`SELECT l.name FROM Libraries l LEFT JOIN LibraryInvitations i ON l.id = i.LibraryId WHERE l.UserId=${userId} OR i.UserId=${userId}`, { type: sequelize.QueryTypes.SELECT})
+        .then(function(libraryNames) {
+          res.send(libraryNames)
+        })
+    } catch (err) {
+      console.log(err)
+      res.status(500).send({
+        error: 'An error has occured trying get all user librarys.'
+      })
+    }
+  },
+  async getLibraryByName(req, res) {
+    try { 
+      const library = await Library.findOne({
+        where : {
+          name : req.params.name
+        }
+      })
+      res.send(library)
+    } catch (err) {
+      console.log(err)
+      res.status(500).send({
+        error: 'An error has occured trying get all user librarys.'
+      })
+    }
+  },  
   async userAcepted(req, res) {
     try {
       console.log(req.params.email)

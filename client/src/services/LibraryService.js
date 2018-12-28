@@ -9,5 +9,11 @@ export default {
   },
   becomeLibraryGuest (email, libraryId) {
     return Api().get(`/library/invite/${email}/${libraryId}`)
+  },
+  getUserLibrarys (userId) {
+    return Api().get(`/library/getUserLibrarys/${userId}`)
+  },
+  getLibraryByName (name) {
+    return Api().get(`/library/getLibrary/${name}`)
   }
 }

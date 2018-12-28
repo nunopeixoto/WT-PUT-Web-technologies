@@ -1,10 +1,6 @@
 [
     {
         "LibraryId": 1,
-        "UserId" : 1
-    },
-    {
-        "LibraryId": 1,
         "UserId" : 2
     }
 ]

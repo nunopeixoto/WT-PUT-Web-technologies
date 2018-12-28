@@ -4,7 +4,8 @@ import HomePage from '@/components/HomePage'
 import Register from '@/components/Register'
 import Login from '@/components/Login'
 import CreateLibrary from '@/components/CreateLibrary'
-import NewBook from '@/components/NewBook'
+import NewBookMan from '@/components/NewBookManually'
+import NewBookAuto from '@/components/NewBookAuto'
 import ManageLibrary from '@/components/ManageLibrary'
 import RegisterEnhanced from '@/components/RegisterEnhanced'
 
@@ -38,9 +39,14 @@ export default new Router({
       component: CreateLibrary
     },
     {
-      path: '/newbook',
-      name: 'newbook',
-      component: NewBook
+      path: '/newbookmanually',
+      name: 'newbookmanually',
+      component: NewBookMan
+    },
+    {
+      path: '/newbookauto',
+      name: 'newbookauto',
+      component: NewBookAuto
     },
     {
       path: '/managelibrary',

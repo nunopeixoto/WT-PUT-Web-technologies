@@ -26,8 +26,12 @@ module.exports = (app) => {
     LibraryController.getAll)
   app.post('/library/invite',
     LibraryController.invite)
+    app.get('/library/getLibrary/:name',
+    LibraryController.getLibraryByName)
   app.get('/library/invite/:email/:libraryId', 
     LibraryController.userAcepted)
+  app.get('/library/getUserLibrarys/:userId', 
+    LibraryController.getUserLibrarys)  
   
 
   app.get('/getAllLibraryInvitations',
@@ -37,6 +41,8 @@ module.exports = (app) => {
   BookController.getAllBooks)
   app.post('/books/newbook',
   BookController.newBook)
+  app.get('/books/search',
+  BookController.search)
 
   app.get('/personalReading/getAllPersonalReading',
   PersonalReadingController.getAllPersonalReading)

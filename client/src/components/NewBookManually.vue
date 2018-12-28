@@ -21,6 +21,7 @@
               <v-text-field label="Number of pages" type="number" required :rules="[required]"  v-model="book.nrPages"></v-text-field>
               <v-text-field label="Publisher"  v-model="book.publisher"></v-text-field>
               <v-text-field label="Language" required :rules="[required]"  v-model="book.language"></v-text-field>
+              <v-text-field label="Thumbnail URL" required :rules="[required]"  v-model="book.thumbnailUrl"></v-text-field>
               <br> 
             <br>
             <!-- <div class="error" v-html="error" /> -->
@@ -60,7 +61,7 @@
   export default {
       data() {
         return {
-          
+
           book: {
             title: null,
             subtitle: null,
@@ -68,7 +69,8 @@
             publishDate: null,
             nrPages: null,
             publisher: null,
-            language: null
+            language: null,
+            thumbnailUrl : null
           },
           error: null,
           success: null,
