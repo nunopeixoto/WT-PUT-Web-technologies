@@ -81,7 +81,7 @@
           })
         } catch (error) {
           this.success = null
-          this.error = "hey"+error.response.data.error
+          this.error = error.response.data.error
         }
         // try {
         //   const userHasLibrary = (await LibraryService.checkHasLibrary({

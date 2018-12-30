@@ -1,0 +1,30 @@
+[
+    {
+        "title": "PHP, MySQL, JavaScript & HTML5 All-in-One For Dummies",
+        "publishDate": "2018-12-11T00:00:00.000Z",
+        "nrPages": 720,
+        "authors": "Steve Suehrin and Janet Valade",
+        "publisher": "John Wiley & Sons",
+        "language": "English",
+        "thumbnailUrl": "http://books.google.com/books/content?id=1cmF0twN4rIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    },
+    {
+        "title": "Object-Oriented PHP",
+        "subtitle": "Concepts, Techniques, and Code",
+        "publishDate": "2006",
+        "nrPages": 216,
+        "authors": "Peter Lavin",
+        "publisher": "John Wiley & Sons",
+        "language": "English",
+        "thumbnailUrl": "http://books.google.com/books/content?id=7IVIiQLvBW8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    },
+    {
+        "title": "Harry Potter and the Chamber of Secrets",
+        "publishDate": "2015-12-08",
+        "nrPages": 357,
+        "authors": "J.K. Rowling",
+        "publisher": "Pottermore Publishing",
+        "language": "English",
+        "thumbnailUrl": "http://books.google.com/books/content?id=1o7D0m_osFEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    }
+]

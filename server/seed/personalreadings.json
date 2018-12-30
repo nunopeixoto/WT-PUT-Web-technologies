@@ -1,0 +1,29 @@
+[
+    {
+        "reading": null,
+        "comment": null,
+        "startDate": null,
+        "endDate": null,
+        "UserId": 1,
+        "LibraryId": 1,
+        "BookId": 1
+    },
+    {
+        "reading": null,
+        "comment": null,
+        "startDate": null,
+        "endDate": null,
+        "UserId": 2,
+        "LibraryId": 1,
+        "BookId": 2
+    },
+    {
+        "reading": null,
+        "comment": null,
+        "startDate": null,
+        "endDate": null,
+        "UserId": 2,
+        "LibraryId": 2,
+        "BookId": 3
+    }
+]

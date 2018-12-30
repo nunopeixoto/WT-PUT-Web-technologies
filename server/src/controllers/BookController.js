@@ -1,5 +1,6 @@
 const {Book} = require('../models')
 var booksSearch = require('google-books-search')
+const _ = require('underscore')
 module.exports = {
   async getBooks(req, res) {
     try {
@@ -68,17 +69,23 @@ module.exports = {
   },
   async search(req, res) {
     try {
-  
+      console.log('eqwoweqweqiweqiewqiweq'+req.params.query)
       var options = {
-        limit: 5,
+        limit: 6,
         type: 'books'
       }
       booksSearch.search(req.params.query, options, function(error, results) {
-        if ( ! error ) {
-            console.log(results)
-            res.send(results)
+        if (!error ) {
+         // var arr = [];
+          results = _.map(results, function(object) {
+            return _.pick(object, ['title', 'subtitle', 'authors', 'publishedDate', 'pageCount', 'publisher', 'language', 'thumbnail'])
+          })
+          console.log(results)
+           res.send(results)
         } else {
-            console.log(error)
+          res.status(400).send({
+            error: 'Error creating book.'
+          })
         }
     })
     

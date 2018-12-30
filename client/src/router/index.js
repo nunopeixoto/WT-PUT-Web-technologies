@@ -45,7 +45,12 @@ export default new Router({
     },
     {
       path: '/newbookmanually/:BookId',
-      name: 'newbookmanually',
+      name: 'newbookmanuallyDb',
+      component: NewBookMan
+    },
+    {
+      path: '/newbookmanually/api/:Book',
+      name: 'newbookmanuallyApi',
       component: NewBookMan
     },
     {

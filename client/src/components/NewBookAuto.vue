@@ -17,9 +17,7 @@
       <small>Author(s): {{ book.author }}</small>
       <a v-bind:href="book.link" target="_blank">
         <img v-bind:src="book.img"/>
-        
         {{ book.title }}
-        
       </a>
     </div>
   </div>
@@ -27,11 +25,11 @@
   <v-container v-if="this.apiContainer">
     <h3> Books on our database </h3>
   <div class="wrapper">
-    <div class="card" v-for="book in filteredListAPI" :key="book.title">
+    <div class="card" v-for="book in filteredListApi" :key="book.title">
+      <small>Author(s): {{ book.author }}</small>
       <a v-bind:href="book.link" target="_blank">
         <img v-bind:src="book.img"/>
-        <small>posted by: {{ book.author }}</small>
-        {{ book.title }} 
+        {{ book.title }}
       </a>
     </div>
   </div>
@@ -53,7 +51,7 @@ export default {
       dbContainer: true,
       apiContainer: false,
       bookListDb : [],
-      bookListAPI : []
+      bookListApi : []
     }
   },
   methods: {
@@ -78,38 +76,53 @@ export default {
   watch : {
     search: _.debounce(async function (value) {
       this.bookListDb = []
+      this.bookListApi = []
       const route = {
         name : 'newbookauto'
       }
-      //do nothing when search is empty
-      if (this.search !== '') {
+      if (this.search !== '') { //only proceed if search is not empty
+
         route.query = {
-          //puts search on the query (URL)
-          search: this.search
+          search: this.search               
         }
-        this.$router.push(route)
-        const results = (await BookService.search(this.search)).data
+        this.$router.push(route)        //puts search text on the query (URL)
+        //Search DB
+        const results = (await BookService.search(this.search)).data  //search the db for books with same title
         for (var i = 0; i < results.length; i++){
-         var obj = results[i]
-         var BookId = obj['id']
-        //  const UserId = this.$store.state.user.id
-        //  const LibraryId = this.$state.store.library.id
-         var URL = `http://localhost:8080/#/newbookmanually/${BookId}`
-         var dbbook = new Book(
-           obj['title'],
-           URL, 
-           obj['authors'],
-           obj['thumbnailUrl']
-         )
-
-         
-         this.bookListDb.push(dbbook)
+          var obj = results[i]
+          var BookId = obj['id']
+          var URL = `http://localhost:8080/#/newbookmanually/${BookId}`
+          var dbbook = new Book(
+              obj['title'],
+              URL, 
+              obj['authors'],
+              obj['thumbnailUrl']
+          )
+          this.bookListDb.push(dbbook)       //add new book to the array
         }
-
+        //SEARCH API
+        const resultsApi = (await BookService.searchApi(this.search)).data  //search the db for books with same title
+        for (var i = 0; i < resultsApi.length; i++){
+          var obj = resultsApi[i]
+          //alert(JSON.stringify(obj))
+         // alert('cqdqdq'+obj['title'])
+          // var BookId = obj['id']
+          const cenas = Buffer.from(JSON.stringify(obj)).toString('base64')
+          var URL = `http://localhost:8080/#/newbookmanually/api/${cenas}`
+          var authorsString = JSON.stringify(obj['authors']).replace(/"/g,'').replace(/\[/,'').replace(/\]/, '') //remove all brackets and quotations marks from string
+          var newBookApi = new Book(
+              obj['title'],
+              URL, 
+              authorsString,
+              obj['thumbnail']
+          )
+          this.bookListApi.push(newBookApi)       //add new book to the array
+          alert(obj['title']+URL)
+        }
       }
       
     }, 700),
-    '$route.query.search' : {
+    '$route.query.search' : {    //puts the text of the query in the search textfield
       immediate: true,
       async handler (value) {
         this.search = value
@@ -122,8 +135,8 @@ export default {
           return book.title.toLowerCase().includes(this.search.toLowerCase())
       })
     },
-    filteredListAPI() {
-      return this.bookListAPI.filter(book => {
+    filteredListApi() {
+      return this.bookListApi.filter(book => {
         return book.title.toLowerCase().includes(this.search.toLowerCase())
       })
     }

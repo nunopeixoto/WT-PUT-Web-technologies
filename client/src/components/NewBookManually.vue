@@ -85,6 +85,9 @@
       methods: {
         async createBook() {
           this.error = null
+          if (!(this.subtitle)){
+            this.book.subtitle = 'No subtitle'
+          }
           const areAllFieldsFilledIn = Object
             .keys(this.book)
             .every(key => !!this.book[key])
@@ -94,19 +97,21 @@
               return
             }
           try {
-            const response = await BookService.createBook(this.book)
-            if (response.data.message){
-             await PersonalReadingService.createPersonalReading({
+            const responseBook = await BookService.createBook(this.book)
+            let personalReadingResponse = null
+            if (responseBook.data.message){
+              personalReadingResponse = await PersonalReadingService.createPersonalReading({
               LibraryId : this.$store.state.library.id,
               UserId : this.$store.state.user.id,
               BookId : this.$route.params.BookId
-            }) 
+            })
             } else {
-            await PersonalReadingService.createPersonalReading({
+            personalReadingResponse = await PersonalReadingService.createPersonalReading({
               LibraryId : this.$store.state.library.id,
               UserId : this.$store.state.user.id,
-              BookId : response.data.id
+              BookId : responseBook.data.id
             })
+            
             }
             this.success = `${this.book.title} added to your library`
             this.dialog = false
@@ -121,6 +126,7 @@
         required: (value) => !!value || 'Required.'
       },
       async mounted () {
+        alert('mounted')
         if (this.$route.params.BookId){ 
           let bookId = this.$route.params.BookId
           const book = await BookService.getBookById(bookId)
@@ -132,8 +138,19 @@
           this.book.publisher = book.data.publisher
           this.book.language = book.data.language
           this.book.thumbnailUrl = book.data.thumbnailUrl
+        } else if (this.$route.params.Book){
+          alert('2')
+          const bookApi = (Buffer.from(this.$route.params.Book, 'base64').toString('ascii'))
+          const bookJson = JSON.parse(bookApi)
+          this.book.title = bookJson.title
+          this.book.subtitle = bookJson.subtitle
+          this.book.authors =  JSON.stringify(bookJson.authors).replace(/"/g,'').replace(/\[/,'').replace(/\]/, '').replace(/,/,', ')
+          this.book.publishDate = bookJson.publishedDate.substring(0,10)
+          this.book.nrPages = bookJson.pageCount
+          this.book.publisher =bookJson.publisher
+          this.book.language = bookJson.language
+          this.book.thumbnailUrl = bookJson.thumbnail
         }
-        
       }
   }
 </script>

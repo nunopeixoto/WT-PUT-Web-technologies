@@ -7,14 +7,18 @@ export default {
   findBook (search) {
     return Api().get(`books/search/${search}`)
   },
-  search (search) {
+  search (bookName) {
     return Api().get('/books/getBooks', {
       params: {
-        search: search
+        search: bookName
       }
     })
+  },
+  searchApi (bookName) {
+    return Api().get(`/books/search/${bookName}`)
   },
   getBookById (id) {
     return Api().get(`books/getBook/${id}`)
   }
+
 }

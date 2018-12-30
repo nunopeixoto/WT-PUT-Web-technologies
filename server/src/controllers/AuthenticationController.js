@@ -156,7 +156,6 @@ module.exports = {
         userIsPartOfLibrary : userIsPartOfLibrary
       })
     } catch (err) {
-      console.log('AQUIQWUQIQWUEQWIEQWUQWEUEQU'+err)
       res.status(500).send({
         error: 'An error has occured trying to log in'
       })
