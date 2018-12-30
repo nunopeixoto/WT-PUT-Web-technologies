@@ -37,16 +37,18 @@ module.exports = (app) => {
   app.get('/getAllLibraryInvitations',
   LibraryInvitationsController.getAllLibraryInvitations)
 
-  app.get('/books/getAllBooks',
-  BookController.getAllBooks)
+  app.get('/books/getBooks',
+  BookController.getBooks)
+  app.get('/books/getBook/:id',
+  BookController.getBookById)
   app.post('/books/newbook',
   BookController.newBook)
-  app.get('/books/search',
+  app.get('/books/search/:query',
   BookController.search)
 
   app.get('/personalReading/getAllPersonalReading',
-  PersonalReadingController.getAllPersonalReading)
-  app.post('/personalReading/newPersonalReading',
+  PersonalReadingController.getAllPersonalReading),
+  app.post('/personalReading/newPersonalReading/',
   PersonalReadingController.newPersonalReading)
   
 }

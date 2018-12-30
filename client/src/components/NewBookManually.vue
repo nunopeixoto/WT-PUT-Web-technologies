@@ -6,7 +6,8 @@
     <v-container>
       <v-layout row wrap>
         <v-flex xs6 offset-xs3>
-            <h2> You are adding a new book to {{$store.state.library.name}} </h2>
+            <h2 v-if="!(this.$route.params.BookId)"> You are adding a new book to {{$store.state.library.name}} </h2>
+            <h2 v-if="this.$route.params.BookId"> Please confirm the data about the book you want to insert into {{$store.state.library.name}}   </h2>
             <br>
           <v-toolbar flat dense class="blue" dark>
             <v-toolbar-title white>Add a new</v-toolbar-title>
@@ -94,11 +95,19 @@
             }
           try {
             const response = await BookService.createBook(this.book)
+            if (response.data.message){
+             await PersonalReadingService.createPersonalReading({
+              LibraryId : this.$store.state.library.id,
+              UserId : this.$store.state.user.id,
+              BookId : this.$route.params.BookId
+            }) 
+            } else {
             await PersonalReadingService.createPersonalReading({
               LibraryId : this.$store.state.library.id,
               UserId : this.$store.state.user.id,
               BookId : response.data.id
             })
+            }
             this.success = `${this.book.title} added to your library`
             this.dialog = false
           } catch (error) {
@@ -110,6 +119,21 @@
       },
       rules: {
         required: (value) => !!value || 'Required.'
+      },
+      async mounted () {
+        if (this.$route.params.BookId){ 
+          let bookId = this.$route.params.BookId
+          const book = await BookService.getBookById(bookId)
+          this.book.title = book.data.title
+          this.book.subtitle = book.data.subtitle
+          this.book.authors = book.data.authors
+          this.book.publishDate = book.data.publishDate.substring(0,10)
+          this.book.nrPages = book.data.nrPages
+          this.book.publisher = book.data.publisher
+          this.book.language = book.data.language
+          this.book.thumbnailUrl = book.data.thumbnailUrl
+        }
+        
       }
   }
 </script>

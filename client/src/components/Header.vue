@@ -106,7 +106,7 @@ import {mapState} from 'vuex'
     },
     watch : {
       async 'library'() {
-        try{
+        try {
         if(this.$store.state.user){
           const response = await LibraryService.getUserLibrarys(this.$store.state.user.id)
         //   alert(JSON.stringify(response))  
@@ -122,6 +122,22 @@ import {mapState} from 'vuex'
         }
       }
     
+  },
+  async mounted(){
+try {
+        if(this.$store.state.user){
+          const response = await LibraryService.getUserLibrarys(this.$store.state.user.id)
+        //   alert(JSON.stringify(response))  
+           var names = response.data
+        //   for (var i=0; i<names.length; i++){
+        //     alert(names[i].name)
+        // }
+
+        this.libraryNames = names
+        }
+        } catch (err) {
+          alert(err)
+        }
   }
 }
 </script>

@@ -44,6 +44,11 @@ export default new Router({
       component: NewBookMan
     },
     {
+      path: '/newbookmanually/:BookId',
+      name: 'newbookmanually',
+      component: NewBookMan
+    },
+    {
       path: '/newbookauto',
       name: 'newbookauto',
       component: NewBookAuto
