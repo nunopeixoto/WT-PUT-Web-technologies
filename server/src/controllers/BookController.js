@@ -71,7 +71,6 @@ module.exports = {
     try {
       console.log('eqwoweqweqiweqiewqiweq'+req.params.query)
       var options = {
-        limit: 6,
         type: 'books'
       }
       booksSearch.search(req.params.query, options, function(error, results) {

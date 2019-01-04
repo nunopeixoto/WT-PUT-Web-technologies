@@ -37,6 +37,35 @@ module.exports = {
       })
     }
   },
+  async getUserByEmailOrUsername(req, res) {
+    try {
+      const query = req.params.query
+      let user = null
+      if (query.substring(0,1) == '@'){
+        user = await User.findOne({
+          where : {
+            username : query.substring(1, query.length)
+          }
+        })
+      } else {
+        user = await User.findOne({
+          where : {
+            email : query
+          }
+        })
+      }
+      if (user==null){
+        res.status(400).send({
+          error: 'The username or e-mail you are typing does not exist. Do not forget to put @ before the username. '
+        })
+      }
+      res.send(user)
+    } catch (err) {
+      res.status(400).send({
+        error: 'Error finding user.'
+      })
+    }
+  },
   async register(req, res) {
     try {
       const user = await User.create(req.body)

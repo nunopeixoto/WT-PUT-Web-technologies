@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       endDate: {
         type: DataTypes.DATE,
       }
+    },
+    {
+      timestamps: false
     })
     
     PersonalReading.associate = function (models) {

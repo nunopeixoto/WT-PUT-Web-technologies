@@ -117,7 +117,7 @@ export default {
               obj['thumbnail']
           )
           this.bookListApi.push(newBookApi)       //add new book to the array
-          alert(obj['title']+URL)
+         // alert(obj['title']+URL)
         }
       }
       

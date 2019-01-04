@@ -3,7 +3,10 @@
 
 module.exports = (sequelize) => {
     const LibraryInvitations = sequelize.define('LibraryInvitations', {
-    })
+    },
+    {
+        timestamps: false
+      })
 
     // By default the code below will add UserId and LibraryId to the LibraryInvitations table, and remove any 
     // previously defined primary key attribute - the table will be uniquely identified by the combination

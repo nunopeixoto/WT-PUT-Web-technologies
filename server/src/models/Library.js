@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
       allowNull: false
     }
+  },
+  {
+    timestamps: false
   })
   
   Library.associate = function (models) {

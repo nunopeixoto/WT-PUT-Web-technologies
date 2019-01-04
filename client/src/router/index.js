@@ -8,6 +8,8 @@ import NewBookMan from '@/components/NewBookManually'
 import NewBookAuto from '@/components/NewBookAuto'
 import ManageLibrary from '@/components/ManageLibrary'
 import RegisterEnhanced from '@/components/RegisterEnhanced'
+import ManageLoan from '@/components/ManageLoan'
+import NewLoan from '@/components/NewLoan'
 
 Vue.use(Router)
 
@@ -62,6 +64,16 @@ export default new Router({
       path: '/managelibrary',
       name: 'managelibrary',
       component: ManageLibrary
+    },
+    {
+      path: '/manageloan',
+      name: 'manageloan',
+      component: ManageLoan
+    },
+    {
+      path: '/newloan',
+      name: 'newloan',
+      component: NewLoan
     }
   ]
 })

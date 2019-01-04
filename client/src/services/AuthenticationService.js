@@ -9,5 +9,8 @@ export default {
   },
   login (credentials) {
     return Api().post('login', credentials)
+  },
+  getUserByEmailOrUsername (query) {
+    return Api().get(`getUserByEmailOrUsername/${query}`)
   }
 }

@@ -4,6 +4,7 @@ const LibraryController = require('./controllers/LibraryController')
 const LibraryInvitationsController = require('./controllers/LibraryInvitationsController')
 const BookController = require('./controllers/BookController')
 const PersonalReadingController = require('./controllers/PersonalReadingController')
+const LoanController = require('./controllers/LoanController')
 
 module.exports = (app) => {
   app.post('/register',
@@ -14,6 +15,8 @@ module.exports = (app) => {
     AuthenticationController.enhancedregister)
   app.get('/getAllUsers',
   AuthenticationController.getAllUsers)
+  app.get('/getUserByEmailOrUsername/:query',
+  AuthenticationController.getUserByEmailOrUsername)
 
   app.post('/login',
     AuthenticationController.login)
@@ -47,8 +50,15 @@ module.exports = (app) => {
   BookController.search)
 
   app.get('/personalReading/getAllPersonalReading',
-  PersonalReadingController.getAllPersonalReading),
+  PersonalReadingController.getAllPersonalReading)
+  app.get('/personalReading/getPersonalReading/:UserId/:LibraryId',
+  PersonalReadingController.getPersonalReadingByLibraryUser)
   app.post('/personalReading/newPersonalReading/',
   PersonalReadingController.newPersonalReading)
+  
+  app.get('/loan/getAll',
+  LoanController.getAll)
+  app.post('/loan/create',
+  LoanController.createLoan)
   
 }

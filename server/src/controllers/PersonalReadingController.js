@@ -11,6 +11,21 @@ module.exports = {
         })
       }
     },
+  async getPersonalReadingByLibraryUser(req, res) {
+      try {
+          const PersonalReadings = await PersonalReading.findAll({
+            where : {
+              UserId: req.params.UserId,
+              LibraryId: req.params.LibraryId
+            }
+          })
+          res.send(PersonalReadings)
+        } catch (err) {
+          res.status(400).send({
+            error: 'Error listing personal readings.'
+          })
+        }
+  },
   async newPersonalReading(req, res) {
     try {
       const personalReadingExists = await PersonalReading.findOne({

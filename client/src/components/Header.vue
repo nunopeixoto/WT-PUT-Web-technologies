@@ -10,6 +10,22 @@
         <v-btn v-if="$store.state.isUserLoggedIn && !$store.state.userHasLibrary && !$store.state.userIsPartOfLibrary" flat dark router to='createlibrary'>
           Create library
         </v-btn>
+        <v-menu v-if="$store.state.isUserLoggedIn  && $store.state.userHasLibrary || $store.state.userIsPartOfLibrary" open-on-hover top offset-y>
+        <v-btn slot="activator" flat dark>
+         Loans
+        </v-btn>
+        <v-list>
+          <v-list-tile router to='manageloan'>
+            <v-list-tile-title>Manage loans</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile router to='newloan'>
+            <v-list-tile-title>Insert loans</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+        <!-- <v-btn v-if="$store.state.isUserLoggedIn  && $store.state.userHasLibrary || $store.state.userIsPartOfLibrary" flat dark router to='manageloan'>
+          Loans
+        </v-btn> -->
         <v-btn v-if="$store.state.isUserLoggedIn  && $store.state.userHasLibrary" flat dark router to='managelibrary'>
           Manage library
         </v-btn>
