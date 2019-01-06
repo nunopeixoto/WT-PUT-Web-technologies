@@ -119,7 +119,7 @@ module.exports = {
   },  
   async userAcepted(req, res) {
     try {
-      console.log(req.params.email)
+      console.log('dwqdwwdqwdqwdqwdqwdqwdqwdqwdqwdqwqd'+req.params.email)
       //verify if user is already in db
       var email = decodeURIComponent(req.params.email)
       const userExists = await User.findOne({
@@ -142,25 +142,27 @@ module.exports = {
             UserId : userJson.id
           }
         })
-        console.log('222222222222222222222222222222222222222222')
+
         if (userAlreadyInLibrary || userIsOwnerOfLibrary){
-          console.log('33333333333333333333333333333333333333333333333333333')
-          return res.redirect('http://localhost:8080/#/login')
+          return res.send({
+            message: 'Success'
+          })
         } else {
-          console.log('44444444444444444444444444444444444444')
           await LibraryInvitations.create({
             UserId : userJson.id,
             LibraryId : req.params.libraryId
           })
-          console.log('555555555555555555555555555555555555555555555555')
-          return res.redirect('http://localhost:8080/#/login')
+          res.setHeader('Access-Control-Allow-Origin', '*');
+          return res.send({
+            message: 'Success'
+          })
 
             }
         }
        else {
         console.log('666666666666666666666666666666666666666666666666')
         res.setHeader('Access-Control-Allow-Origin', '*')
-        return res.redirect(`http://localhost:8080/#/registerenhanced/${req.params.email}/${req.params.libraryId}`)
+        return res.redirect(`http://localhost:8080/register-enhanced/${req.params.email}/${req.params.libraryId}`)
       }
     } catch (err) {
       res.status(500).send({

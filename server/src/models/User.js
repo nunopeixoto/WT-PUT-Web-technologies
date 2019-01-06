@@ -33,9 +33,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   },
   {
-    timestamps: false
-  },
-  {
     hooks: {
       beforeSave: hashPassword
     }

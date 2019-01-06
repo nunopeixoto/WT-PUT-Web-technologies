@@ -1,34 +1,25 @@
+<script>/*eslint-disable */ </script>
 <template>
-  <div id="app">
-    <v-app>
-      <page-header />
-      <main>
-        <v-container fluid>
-          <router-view></router-view>
-        </v-container>
-      </main>
-    </v-app>
-  </div>
+  <v-app>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <core-filter />
+
+    <core-toolbar />
+
+    <core-drawer />
+
+    <core-view />
+  </v-app>
 </template>
 
-<script>
-import PageHeader from '@/components/Header.vue'
+<style lang="scss">
+@import '@/styles/index.scss';
 
-export default {
-  name: 'app',
-  components: {
-    PageHeader
-  }
-}
-</script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+/* Remove in 1.2 */
+.v-datatable thead th.column.sortable i {
+  vertical-align: unset;
 }
 </style>

@@ -195,7 +195,7 @@ module.exports = {
       var token = req.params.token
       var id = jwt_decode(token).id
     await User.update({ confirmed: true }, { where: { id } })
-    return res.redirect('http://localhost:8080/#/login')
+    return res.redirect('http://localhost:8080/login')
     } catch (err) {
       res.status(500).send({
         error: 'An error has occured trying to validate your account.'

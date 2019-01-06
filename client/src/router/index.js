@@ -1,79 +1,63 @@
+/**
+ * Vue Router
+ *
+ * @library
+ *
+ * https://router.vuejs.org/en/
+ */
+
+// Lib imports
 import Vue from 'vue'
+import VueAnalytics from 'vue-analytics'
 import Router from 'vue-router'
-import HomePage from '@/components/HomePage'
-import Register from '@/components/Register'
-import Login from '@/components/Login'
-import CreateLibrary from '@/components/CreateLibrary'
-import NewBookMan from '@/components/NewBookManually'
-import NewBookAuto from '@/components/NewBookAuto'
-import ManageLibrary from '@/components/ManageLibrary'
-import RegisterEnhanced from '@/components/RegisterEnhanced'
-import ManageLoan from '@/components/ManageLoan'
-import NewLoan from '@/components/NewLoan'
+import Meta from 'vue-meta'
+
+// Routes
+import paths from './paths'
+
+function route (path, view, name) {
+  return {
+    name: name || view,
+    path,
+    component: (resovle) => import(
+      `@/views/${view}.vue`
+    ).then(resovle)
+  }
+}
 
 Vue.use(Router)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'root',
-      component: HomePage
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    {
-      path: '/registerenhanced/:email/:libraryId',
-      name: 'registerenhanced',
-      component: RegisterEnhanced
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/createlibrary',
-      name: 'createlibrary',
-      component: CreateLibrary
-    },
-    {
-      path: '/newbookmanually',
-      name: 'newbookmanually',
-      component: NewBookMan
-    },
-    {
-      path: '/newbookmanually/:BookId',
-      name: 'newbookmanuallyDb',
-      component: NewBookMan
-    },
-    {
-      path: '/newbookmanually/api/:Book',
-      name: 'newbookmanuallyApi',
-      component: NewBookMan
-    },
-    {
-      path: '/newbookauto',
-      name: 'newbookauto',
-      component: NewBookAuto
-    },
-    {
-      path: '/managelibrary',
-      name: 'managelibrary',
-      component: ManageLibrary
-    },
-    {
-      path: '/manageloan',
-      name: 'manageloan',
-      component: ManageLoan
-    },
-    {
-      path: '/newloan',
-      name: 'newloan',
-      component: NewLoan
+// Create a new router
+const router = new Router({
+  mode: 'history',
+  routes: paths.map(path => route(path.path, path.view, path.name)),
+  // routes: paths.map(path => route(path.path, path.view, path.name)).concat([
+  //   { path: '*', redirect: '/' }
+  // ]),
+  scrollBehavior (to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
     }
-  ]
+    if (to.hash) {
+      return { selector: to.hash }
+    }
+    return { x: 0, y: 0 }
+  }
 })
+
+Vue.use(Meta)
+
+// Bootstrap Analytics
+// Set in .env
+// https://github.com/MatteoGabriele/vue-analytics
+if (process.env.GOOGLE_ANALYTICS) {
+  Vue.use(VueAnalytics, {
+    id: process.env.GOOGLE_ANALYTICS,
+    router,
+    autoTracking: {
+      page: process.env.NODE_ENV !== 'development'
+    }
+  })
+}
+
+export default router
