@@ -12,5 +12,8 @@ export default {
   },
   updateComment (personalReadingId, comment) {
     return Api().post(`/personalReading/updateComment/${personalReadingId}/${comment}`)
+  },
+  findLastFinishedPersonalReading (userId) {
+    return Api().get(`/personalReading/findLastFinishedPersonalReading/${userId}`)
   }
 }

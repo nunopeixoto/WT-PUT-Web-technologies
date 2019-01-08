@@ -8,10 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'No comments added.'
       },
       startDate: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATEONLY,
       },
       endDate: {
-        type: DataTypes.STRING,
+        type: DataTypes.DATEONLY,
       }
     },
     {

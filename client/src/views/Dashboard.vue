@@ -6,36 +6,36 @@
   <v-container fill-height fluid grid-list-xl>
     <v-layout wrap>
       <!-- <v-flex
-            md12
-            sm12
-            lg4
-          >
-            <material-chart-card
-              :data="dailySalesChart.data"
-              :options="dailySalesChart.options"
-              color="info"
-              type="Line"
+              md12
+              sm12
+              lg4
             >
-              <h4 class="title font-weight-light">Daily Sales</h4>
-              <p class="category d-inline-flex font-weight-light">
-                <v-icon
-                  color="green"
-                  small
-                >
-                  mdi-arrow-up
-                </v-icon>
-                <span class="green--text">55%</span>&nbsp;
-                increase in today's sales
-              </p>
-    
-              <template slot="actions">
-                <v-icon
-                  class="mr-2"
-                  small
-                >
-                  mdi-clock-outline
-                </v-icon>
-                <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
+              <material-chart-card
+                :data="dailySalesChart.data"
+                :options="dailySalesChart.options"
+                color="info"
+                type="Line"
+              >
+                <h4 class="title font-weight-light">Daily Sales</h4>
+                <p class="category d-inline-flex font-weight-light">
+                  <v-icon
+                    color="green"
+                    small
+                  >
+                    mdi-arrow-up
+                  </v-icon>
+                  <span class="green--text">55%</span>&nbsp;
+                  increase in today's sales
+                </p>
+      
+                <template slot="actions">
+                  <v-icon
+                    class="mr-2"
+                    small
+                  >
+                    mdi-clock-outline
+                  </v-icon>
+                  <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
 </template>
         </material-chart-card>
       </v-flex>
@@ -83,54 +83,15 @@
   <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
 </template>
         </material-chart-card>
+      </v-flex> -->
+      <v-flex sm6 xs12 md6 lg3>
+        <material-stats-card color="green" icon="mdi-book" title="Last finished book" :value="this.lastFinishedBook.title" sub-icon="mdi-calendar" :sub-text="this.lastFinishedBook.endDate"/>
       </v-flex>
-      <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="green"
-          icon="mdi-store"
-          title="Revenue"
-          value="$34,245"
-          sub-icon="mdi-calendar"
-          sub-text="Last 24 Hours"
-        />
+      <v-flex sm6 xs12 md6 lg3>
+        <material-stats-card color="orange" icon="mdi-content-copy" title="Used Space" value="49/50" small-value="GB" sub-icon="mdi-alert" sub-icon-color="error" sub-text="Get More Space..." sub-text-color="text-primary"/>
       </v-flex>
-      <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="orange"
-          icon="mdi-content-copy"
-          title="Used Space"
-          value="49/50"
-          small-value="GB"
-          sub-icon="mdi-alert"
-          sub-icon-color="error"
-          sub-text="Get More Space..."
-          sub-text-color="text-primary"
-        />
-      </v-flex>
-      <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="red"
-          icon="mdi-information-outline"
-          title="Fixed Issues"
-          value="75"
-          sub-icon="mdi-tag"
-          sub-text="Tracked from Github"
-        />
+      <v-flex sm6 xs12 md6 lg3>
+        <material-stats-card color="red" icon="mdi-information-outline" title="Fixed Issues" value="75" sub-icon="mdi-tag" sub-text="Tracked from Github"/>
       </v-flex>
       <v-flex
         sm6
@@ -146,7 +107,7 @@
           sub-icon="mdi-update"
           sub-text="Just Updated"
         />
-      </v-flex> -->
+      </v-flex>
       <v-flex
         md12
         lg12
@@ -191,19 +152,6 @@
         </material-card>
       </v-flex>
     </v-layout>
-    <!-- <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="290">
-        <v-card>
-          <v-card-title class="headline">Use Google's location service?</v-card-title>
-          <v-card-text>Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.</v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="dialog = false">Disagree</v-btn>
-            <v-btn color="green darken-1" flat @click="dialog = false">Agree</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-layout> -->
     <v-dialog v-model="dialogReading" max-width="700px">
           <v-card>
             <v-card-title>
@@ -274,6 +222,10 @@
   export default {
     data() {
       return {
+        lastFinishedBook: {
+          endDate: '',
+          title: ''
+        },
         dialogReading: false,
         dialogComment: false,
         search: '',
@@ -435,7 +387,7 @@
           if (this.editedIndex > -1) {
             let updatedReading = (this.editedItem).reading
             let reading = null
-            let dateToSend = ''
+            let dateToSend = null
             let personalReadingId = (this.editedItem).personalReadingId
             if (updatedReading == 'Not read') {
               reading = 0
@@ -450,6 +402,7 @@
             }
             await PersonalReadingService.updateReading(personalReadingId, reading, dateToSend)
             Object.assign(this.books[this.editedIndex], this.editedItem)
+            alert('hey')
           } else {
             this.books.push(this.editedItem)
           }
@@ -459,16 +412,16 @@
         }
       },
       async saveComment() {
-        try{
+        try {
           if (this.editedIndex > -1) {
-              let updatedComment = (this.editedItem).comment
-              let personalReadingId = (this.editedItem).personalReadingId
-              await PersonalReadingService.updateComment(personalReadingId, updatedComment)
-              Object.assign(this.books[this.editedIndex], this.editedItem)
-            } else {
-              this.books.push(this.editedItem)
-            }
-            this.closeDialogComment()
+            let updatedComment = (this.editedItem).comment
+            let personalReadingId = (this.editedItem).personalReadingId
+            await PersonalReadingService.updateComment(personalReadingId, updatedComment)
+            Object.assign(this.books[this.editedIndex], this.editedItem)
+          } else {
+            this.books.push(this.editedItem)
+          }
+          this.closeDialogComment()
         } catch (err) {
           alert(err)
         }
@@ -487,8 +440,19 @@
           this.editedIndex = -1
         }, 300)
       },
+      async findLastFinishedBook(){
+        try {
+          const lastFinishedPersonalReading = await PersonalReadingService.findLastFinishedPersonalReading(this.$store.state.user.id)
+          const lastBook = (await BookService.getBookById(lastFinishedPersonalReading.data[0].BookId)).data
+          this.lastFinishedBook.title = lastBook.title 
+          this.lastFinishedBook.endDate = 'Finished in ' +lastFinishedPersonalReading.data[0].endDate
+        } catch (err) {
+          alert(err)
+        }
+      }
     },
     async mounted() {
+      this.findLastFinishedBook()
       this.books = []
       const response = (await PersonalReadingService.getPersonalReadingByLibraryUser(this.$store.state.user.id, 0)).data
       for (var i = 0; i < response.length; i++) {

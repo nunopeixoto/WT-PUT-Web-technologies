@@ -1,4 +1,5 @@
 const {PersonalReading} = require('../models')
+
 module.exports = {
   async getAllPersonalReading(req, res) {
     try {
@@ -65,30 +66,35 @@ module.exports = {
   },
   async updateReading(req, res) {
     try {
-      const Sequelize = require('sequelize')
-      const config = require('../config/config')
-      const sequelize = new Sequelize(
-        config.db.database,
-        config.db.user,
-        config.db.password,
-        config.db.options
-      )
+      let newPersonalReading = null
       if (req.params.reading == 2){
-        sequelize.query(`UPDATE PersonalReadings SET reading = ${req.params.reading}, startDate = "${req.params.date}" WHERE id=${req.params.personalReadingId};`, { type: sequelize.QueryTypes.UPDATE})
-        .then(function(newPersonalReading) {
-          res.send(newPersonalReading)
+        PersonalReading.update({
+          reading: req.params.reading,
+          startDate: (req.params.date)
+        }, {
+        where: 
+          {id: req.params.personalReadingId}
         })
+        res.send(newPersonalReading)
       } else if (req.params.reading == 1){
-        sequelize.query(`UPDATE PersonalReadings SET reading = ${req.params.reading}, endDate = "${req.params.date}" WHERE id=${req.params.personalReadingId};`, { type: sequelize.QueryTypes.UPDATE})
-        .then(function(newPersonalReading) {
-          res.send(newPersonalReading)
+        PersonalReading.update({
+          reading: req.params.reading,
+          endDate: (req.params.date)
+        }, {
+        where: 
+          {id: req.params.personalReadingId}
         })
+        res.send(newPersonalReading)
       } else {
-      sequelize.query(`UPDATE PersonalReadings SET reading = ${req.params.reading} WHERE id=${req.params.personalReadingId};`, { type: sequelize.QueryTypes.UPDATE})
-        .then(function(newPersonalReading) {
-          res.send(newPersonalReading)
+        PersonalReading.update({
+          reading: req.params.reading
+        }, {
+        where: 
+          {id: req.params.personalReadingId}
         })
-      }     
+        res.send(newPersonalReading)
+      }
+      console.log('heqyeqwuweque')     
     } catch (err) {
       console.log(err)
       res.status(400).send({
@@ -98,18 +104,13 @@ module.exports = {
   },
   async updateComment(req, res) {
     try {
-      const Sequelize = require('sequelize')
-      const config = require('../config/config')
-      const sequelize = new Sequelize(
-        config.db.database,
-        config.db.user,
-        config.db.password,
-        config.db.options
-      )
-        sequelize.query(`UPDATE PersonalReadings SET comment = "${req.params.comment}" WHERE id=${req.params.personalReadingId};`, { type: sequelize.QueryTypes.UPDATE})
-        .then(function(newPersonalReading) {
-          res.send(newPersonalReading)
-        })  
+      const updatedPersonalReading = PersonalReading.update({
+        comment: req.params.comment
+      }, {
+      where: 
+        {id: req.params.personalReadingId}
+      })
+      res.send(updatedPersonalReading) 
     } catch (err) {
       console.log(err)
       res.status(400).send({
@@ -117,4 +118,16 @@ module.exports = {
       })
     }
   },
+  async findLastFinishedPersonalReading(req, res) {
+    try {
+      const lastFinishedPersonalReading = await PersonalReading.findAll({where: {UserId: req.params.UserId}, limit: 1, order: [['endDate', 'DESC']]})
+
+      res.send(lastFinishedPersonalReading)
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({
+        error: 'Error finding last finished book.'
+      })
+    }
+  }
 }
