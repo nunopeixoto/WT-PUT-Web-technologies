@@ -29,36 +29,40 @@ module.exports = (app) => {
     LibraryController.getAll)
   app.post('/library/invite',
     LibraryController.invite)
-    app.get('/library/getLibrary/:name',
+  app.get('/library/getLibrary/:name',
     LibraryController.getLibraryByName)
+  app.get('/library/getLibraryById/:id',
+    LibraryController.getLibraryById)
   app.get('/library/invite/:email/:libraryId', 
     LibraryController.userAcepted)
   app.get('/library/getUserLibrarys/:userId', 
     LibraryController.getUserLibrarys)  
   
 
-  app.get('/getAllLibraryInvitations',
+app.get('/getAllLibraryInvitations',
   LibraryInvitationsController.getAllLibraryInvitations)
 
-  app.get('/books/getBooks',
+app.get('/books/getBooks',
   BookController.getBooks)
-  app.get('/books/getBook/:id',
+app.get('/books/getBook/:id',
   BookController.getBookById)
-  app.post('/books/newbook',
+app.post('/books/newbook',
   BookController.newBook)
-  app.get('/books/search/:query',
+app.get('/books/search/:query',
   BookController.search)
 
-  app.get('/personalReading/getAllPersonalReading',
+app.get('/personalReading/getAllPersonalReading',
   PersonalReadingController.getAllPersonalReading)
-  app.get('/personalReading/getPersonalReading/:UserId/:LibraryId',
+app.get('/personalReading/getPersonalReading/:UserId/:LibraryId',
   PersonalReadingController.getPersonalReadingByLibraryUser)
-  app.post('/personalReading/newPersonalReading/',
+app.post('/personalReading/newPersonalReading/',
   PersonalReadingController.newPersonalReading)
+app.post('/personalReading/updateReading/:personalReadingId/:reading/:date',
+  PersonalReadingController.updateReading)
   
-  app.get('/loan/getAll',
+app.get('/loan/getAll',
   LoanController.getAll)
-  app.post('/loan/create',
+app.post('/loan/create',
   LoanController.createLoan)
   
 }

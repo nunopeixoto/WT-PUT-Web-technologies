@@ -47,9 +47,11 @@
       {{error}}
     </v-alert>
     <br>
-    <v-btn dark class="cyan" @click="dialog = true">
+    <v-flex xs12 text-xs-right>
+    <v-btn color="success" @click="dialog = true">
       Submit
     </v-btn>
+    </v-flex>
     <v-layout row justify-center>
       <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>

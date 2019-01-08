@@ -1,17 +1,21 @@
 <script> /* eslint-disable */ </script>
 <template>
   <v-navigation-drawer id="app-drawer" v-model="inputValue" app dark floating persistent mobile-break-point="991" width="260">
-    <v-img :src="image" height="100%">
+    <v-img :src="`https://i.imgur.com/6eXf3ev.jpg`" height="100%">
       <v-layout class="fill-height" tag="v-list" column>
         <v-list-tile avatar>
           <v-list-tile-avatar color="white">
             <v-img :src="logo" height="34" contain />
           </v-list-tile-avatar>
-          <v-list-tile-title class="title">
+          <v-list-tile-title v-if="!this.$store.state.isUserLoggedIn" class="title" @click="navigateTo({name: 'Homepage'})">
+            myLibrary
+          </v-list-tile-title>
+          <v-list-tile-title v-if="this.$store.state.isUserLoggedIn" class="title" @click="navigateTo({name: 'Dashboard'})">
             myLibrary
           </v-list-tile-title>
         </v-list-tile>
         <v-divider/>
+        <div v-if="this.$store.state.isUserLoggedIn && (this.$store.state.userHasLibrary || this.$store.state.userIsPartOfLibrary)">
         <v-list-group no-action >
         <v-list-tile slot="activator" :active-class="color" avatar class="v-list-item" style="pointer-events: none;">
             <v-list-tile-action>
@@ -27,6 +31,7 @@
         </v-list-group>
         <br>
         <v-divider/>
+        </div>
         <v-list-tile  v-if="this.$store.state.isUserLoggedIn && !this.$store.state.userHasLibrary" to="/create-library" :active-class="color" avatar class="v-list-item">
             <v-list-tile-action>
               <v-icon>mdi-library-plus</v-icon>
@@ -47,7 +52,7 @@
           </v-list-tile>
           <v-list-tile  v-if="this.$store.state.isUserLoggedIn && (this.$store.state.userHasLibrary || this.$store.state.userIsPartOfLibrary)" to="/add-loan" :active-class="color" avatar class="v-list-item">
             <v-list-tile-action>
-              <v-icon>mdi-book-plus</v-icon>
+              <v-icon>mdi-checkbook</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>Add loan</v-list-tile-title>
           </v-list-tile>
@@ -67,7 +72,7 @@
           <v-list-tile-title v-text="link.text" />
         </v-list-tile>
         </v-flex>
-        <v-list-tile  :active-class="color" avatar class="v-list-item" @click="logout">
+        <v-list-tile  v-if="this.$store.state.isUserLoggedIn" :active-class="color" avatar class="v-list-item" @click="logout">
           <v-list-tile-action>
             <v-icon>mdi-logout</v-icon>
           </v-list-tile-action>
@@ -91,7 +96,7 @@ import store from '@/store/index'
   export default {
     data: () => ({
       libraryNames: null,
-      logo: 'https://madewithvuejs.com/mandant/madewithvuejs/images/logo-vuetify.png',
+      logo: 'https://img.icons8.com/metro/1600/book-stack.png',
       linksNotLoggedIn: [
         {
           to: '/',
@@ -99,16 +104,15 @@ import store from '@/store/index'
           text: 'Home page'
         },
         {
+          to: '/register',
+          icon: 'mdi-account-plus',
+          text: 'Register'
+        },
+        {
           to: '/login',
           icon: 'mdi-account',
           text: 'Login'
-        },
-        {
-          to: '/register',
-          icon: 'mdi-account',
-          text: 'Register'
         }
-
       ],
       linksLoggedIn: [
         {
@@ -193,6 +197,9 @@ import store from '@/store/index'
         } else {
           this.responsive = false
         }
+      },
+      navigateTo(route) {
+        this.$router.push(route)
       },
       logout () {
         this.$store.dispatch('setToken', null)

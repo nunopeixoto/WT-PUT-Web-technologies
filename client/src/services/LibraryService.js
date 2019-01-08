@@ -15,5 +15,8 @@ export default {
   },
   getLibraryByName (name) {
     return Api().get(`/library/getLibrary/${name}`)
+  },
+  getLibraryById (id) {
+    return Api().get(`/library/getLibraryById/${id}`)
   }
 }

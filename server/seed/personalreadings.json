@@ -1,7 +1,7 @@
 [
     {
-        "reading": null,
-        "comment": null,
+        "reading": 0,
+        "comment": "cenas",
         "startDate": null,
         "endDate": null,
         "UserId": 1,
@@ -9,8 +9,8 @@
         "BookId": 1
     },
     {
-        "reading": null,
-        "comment": null,
+        "reading": 0,
+        "comment": "cenas1",
         "startDate": null,
         "endDate": null,
         "UserId": 1,
@@ -18,8 +18,8 @@
         "BookId": 2
     },
     {
-        "reading": null,
-        "comment": null,
+        "reading": 0,
+        "comment": "cenas2",
         "startDate": null,
         "endDate": null,
         "UserId": 1,
@@ -27,7 +27,7 @@
         "BookId": 3
     },
     {
-        "reading": null,
+        "reading": 0,
         "comment": null,
         "startDate": null,
         "endDate": null,
@@ -36,7 +36,7 @@
         "BookId": 2
     },
     {
-        "reading": null,
+        "reading": 0,
         "comment": null,
         "startDate": null,
         "endDate": null,

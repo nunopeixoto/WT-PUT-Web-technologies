@@ -117,6 +117,21 @@ module.exports = {
       })
     }
   },  
+  async getLibraryById(req, res) {
+    try { 
+      const library = await Library.findOne({
+        where : {
+          id : req.params.id
+        }
+      })
+      res.send(library)
+    } catch (err) {
+      console.log(err)
+      res.status(500).send({
+        error: 'An error has occured trying get all user librarys.'
+      })
+    }
+  },  
   async userAcepted(req, res) {
     try {
       console.log('dwqdwwdqwdqwdqwdqwdqwdqwdqwdqwdqwqd'+req.params.email)
