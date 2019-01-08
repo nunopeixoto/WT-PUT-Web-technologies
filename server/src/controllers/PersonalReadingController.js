@@ -1,6 +1,4 @@
-//const dateFormat = require('dateformat')
 const {PersonalReading} = require('../models')
-
 module.exports = {
   async getAllPersonalReading(req, res) {
     try {
@@ -75,12 +73,6 @@ module.exports = {
         config.db.password,
         config.db.options
       )
-      const today = new Date()
-      /* eslint-disable */
-      let cenas = today.toISOString().split('T')
-      //.replace(/T/, "").replace(/\..+/,'')+''
-     // console.log('fejfwqujwqdjdwqwqd'+ cenas[0])
-     var now = new Date()
       if (req.params.reading == 2){
         sequelize.query(`UPDATE PersonalReadings SET reading = ${req.params.reading}, startDate = "${req.params.date}" WHERE id=${req.params.personalReadingId};`, { type: sequelize.QueryTypes.UPDATE})
         .then(function(newPersonalReading) {
@@ -96,13 +88,33 @@ module.exports = {
         .then(function(newPersonalReading) {
           res.send(newPersonalReading)
         })
-      }
-        
+      }     
     } catch (err) {
       console.log(err)
       res.status(400).send({
         error: 'Error updating personal reading.'
       })
     }
-  }
+  },
+  async updateComment(req, res) {
+    try {
+      const Sequelize = require('sequelize')
+      const config = require('../config/config')
+      const sequelize = new Sequelize(
+        config.db.database,
+        config.db.user,
+        config.db.password,
+        config.db.options
+      )
+        sequelize.query(`UPDATE PersonalReadings SET comment = "${req.params.comment}" WHERE id=${req.params.personalReadingId};`, { type: sequelize.QueryTypes.UPDATE})
+        .then(function(newPersonalReading) {
+          res.send(newPersonalReading)
+        })  
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({
+        error: 'Error updating personal reading.'
+      })
+    }
+  },
 }

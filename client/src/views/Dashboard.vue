@@ -6,36 +6,36 @@
   <v-container fill-height fluid grid-list-xl>
     <v-layout wrap>
       <!-- <v-flex
-          md12
-          sm12
-          lg4
-        >
-          <material-chart-card
-            :data="dailySalesChart.data"
-            :options="dailySalesChart.options"
-            color="info"
-            type="Line"
+            md12
+            sm12
+            lg4
           >
-            <h4 class="title font-weight-light">Daily Sales</h4>
-            <p class="category d-inline-flex font-weight-light">
-              <v-icon
-                color="green"
-                small
-              >
-                mdi-arrow-up
-              </v-icon>
-              <span class="green--text">55%</span>&nbsp;
-              increase in today's sales
-            </p>
-  
-            <template slot="actions">
-              <v-icon
-                class="mr-2"
-                small
-              >
-                mdi-clock-outline
-              </v-icon>
-              <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
+            <material-chart-card
+              :data="dailySalesChart.data"
+              :options="dailySalesChart.options"
+              color="info"
+              type="Line"
+            >
+              <h4 class="title font-weight-light">Daily Sales</h4>
+              <p class="category d-inline-flex font-weight-light">
+                <v-icon
+                  color="green"
+                  small
+                >
+                  mdi-arrow-up
+                </v-icon>
+                <span class="green--text">55%</span>&nbsp;
+                increase in today's sales
+              </p>
+    
+              <template slot="actions">
+                <v-icon
+                  class="mr-2"
+                  small
+                >
+                  mdi-clock-outline
+                </v-icon>
+                <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
 </template>
         </material-chart-card>
       </v-flex>
@@ -174,15 +174,18 @@
 </template>
 
 <template slot="items" slot-scope="props">
-  <td>
+  <td style="display:none;">
     {{ props.item.personalReadingId }}</td>
   <td>{{ props.item.title }}</td>
   <td>{{ props.item.authors }}</td>
   <td>{{ props.item.numberpages }}</td>
   <td>{{ props.item.library }}</td>
   <td>
-    <v-icon small @click="editItem(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }} </td>
-  <td>{{ props.item.comment }}</td>
+    <v-icon small @click="editReading(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }}
+  </td>
+  <td>
+    <v-icon small @click="editComment(props.item)" color="indigo">edit</v-icon> {{ props.item.comment }}
+  </td>
 </template>
           </v-data-table>
         </material-card>
@@ -201,7 +204,7 @@
         </v-card>
       </v-dialog>
     </v-layout> -->
-    <v-dialog v-model="dialog" max-width="700px">
+    <v-dialog v-model="dialogReading" max-width="700px">
           <v-card>
             <v-card-title>
               <span class="headline">Change the read status of {{editedItem.title}}</span>
@@ -233,13 +236,33 @@
                 </v-layout>
               </v-container>
             </v-card-text>
-  
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" flat @click="closeDialogReading">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="saveReading">Save</v-btn>
             </v-card-actions>
           </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogComment" max-width="900px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Comment {{editedItem.title}}</span>
+        </v-card-title>
+         <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12 md12>
+                <v-textarea v-model="editedItem.comment" label="Comment"></v-textarea>
+              </v-flex>
+            </v-layout>
+          </v-container>
+         </v-card-text>
+         <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click="closeDialogComment">Cancel</v-btn>
+          <v-btn color="blue darken-1" flat @click="saveComment">Save</v-btn>
+         </v-card-actions>
+        </v-card>
         </v-dialog>
   </v-container>
 </template>
@@ -251,7 +274,8 @@
   export default {
     data() {
       return {
-        dialog: false,
+        dialogReading: false,
+        dialogComment: false,
         search: '',
         date: new Date().toISOString().substr(0, 10),
         modalStart: false,
@@ -338,9 +362,10 @@
         //   ]
         // },
         headers: [{
-            sortable: false,
+            class: 'idcolumn',
+            sortable: true,
             text: 'Id',
-            value: 'personalReadingId'
+            value: 'personalReadingId',
           },
           {
             sortable: false,
@@ -395,12 +420,17 @@
       complete(index) {
         this.list[index] = !this.list[index]
       },
-      editItem(item) {
+      editReading(item) {
         this.editedIndex = this.books.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        this.dialogReading = true
       },
-      async save() {
+      editComment(item) {
+        this.editedIndex = this.books.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialogComment = true
+      },
+      async saveReading() {
         try {
           if (this.editedIndex > -1) {
             let updatedReading = (this.editedItem).reading
@@ -423,18 +453,40 @@
           } else {
             this.books.push(this.editedItem)
           }
-          this.close()
+          this.closeDialogReading()
         } catch (err) {
           alert(err)
         }
       },
-      close() {
-        this.dialog = false
+      async saveComment() {
+        try{
+          if (this.editedIndex > -1) {
+              let updatedComment = (this.editedItem).comment
+              let personalReadingId = (this.editedItem).personalReadingId
+              await PersonalReadingService.updateComment(personalReadingId, updatedComment)
+              Object.assign(this.books[this.editedIndex], this.editedItem)
+            } else {
+              this.books.push(this.editedItem)
+            }
+            this.closeDialogComment()
+        } catch (err) {
+          alert(err)
+        }
+      },
+      closeDialogReading() {
+        this.dialogReading = false
         setTimeout(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
           this.editedIndex = -1
         }, 300)
-      }
+      },
+      closeDialogComment() {
+        this.dialogComment = false
+        setTimeout(() => {
+          this.editedItem = Object.assign({}, this.defaultItem)
+          this.editedIndex = -1
+        }, 300)
+      },
     },
     async mounted() {
       this.books = []
@@ -458,9 +510,15 @@
           numberpages: book.nrPages,
           library: (await LibraryService.getLibraryById(obj['LibraryId'])).data.name,
           reading: reading,
-          comment: obj['comment'],
+          comment: obj['comment'].substring(0, 25),
         })
       }
+      var x = document.getElementsByClassName("idcolumn")
+      x[0].style.display = "none"
     }
   }
 </script>
+
+<style scoped>
+  
+</style>

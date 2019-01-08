@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       comment: {
         type: DataTypes.TEXT,
+        defaultValue: 'No comments added.'
       },
       startDate: {
         type: DataTypes.STRING,

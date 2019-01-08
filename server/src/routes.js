@@ -59,6 +59,8 @@ app.post('/personalReading/newPersonalReading/',
   PersonalReadingController.newPersonalReading)
 app.post('/personalReading/updateReading/:personalReadingId/:reading/:date',
   PersonalReadingController.updateReading)
+app.post('/personalReading/updateComment/:personalReadingId/:comment',
+  PersonalReadingController.updateComment)
   
 app.get('/loan/getAll',
   LoanController.getAll)

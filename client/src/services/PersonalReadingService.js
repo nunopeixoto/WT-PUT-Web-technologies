@@ -9,5 +9,8 @@ export default {
   },
   updateReading (personalReadingId, reading, date) {
     return Api().post(`/personalReading/updateReading/${personalReadingId}/${reading}/${date}`)
+  },
+  updateComment (personalReadingId, comment) {
+    return Api().post(`/personalReading/updateComment/${personalReadingId}/${comment}`)
   }
 }
