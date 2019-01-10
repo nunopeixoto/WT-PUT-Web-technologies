@@ -172,6 +172,7 @@
             startDate: this.Loan.startDate,
             status: this.Loan.status
          })
+         this.Loan.UserBorrowerId = null
          this.error= ''
          this.success = 'Loan added to your list.'
          } else if (this.selectFrom == 'External user') {

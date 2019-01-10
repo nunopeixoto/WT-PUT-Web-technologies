@@ -7,6 +7,9 @@ export default {
   getPersonalReadingByLibraryUser (UserId, LibraryId) {
     return Api().get(`/personalReading/getPersonalReading/${UserId}/${LibraryId}`)
   },
+  getPersonalReadingById (UserId) {
+    return Api().get(`/personalReading/getPersonalReadingById/${UserId}`)
+  },
   updateReading (personalReadingId, reading, date) {
     return Api().post(`/personalReading/updateReading/${personalReadingId}/${reading}/${date}`)
   },
@@ -15,5 +18,14 @@ export default {
   },
   findLastFinishedPersonalReading (userId) {
     return Api().get(`/personalReading/findLastFinishedPersonalReading/${userId}`)
+  },
+  findCurrentlyReadingPersonalReading (userId) {
+    return Api().get(`/personalReading/findCurrentlyReadingPersonalReading/${userId}`)
+  },
+  findBooksReadFromLibraries (userId) {
+    return Api().get(`/personalReading/findBooksReadFromLibraries/${userId}`)
+  },
+  findAverages (userId) {
+    return Api().get(`/personalReading/findAverages/${userId}`)
   }
 }

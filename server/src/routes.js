@@ -17,6 +17,8 @@ module.exports = (app) => {
   AuthenticationController.getAllUsers)
   app.get('/getUserByEmailOrUsername/:query',
   AuthenticationController.getUserByEmailOrUsername)
+  app.get('/getUserById/:UserId',
+  AuthenticationController.getUserById)
 
   app.post('/login',
     AuthenticationController.login)
@@ -53,6 +55,8 @@ app.get('/books/search/:query',
 
 app.get('/personalReading/getAllPersonalReading',
   PersonalReadingController.getAllPersonalReading)
+  app.get('/personalReading/getPersonalReadingById/:PersonalReadingId',
+PersonalReadingController.getPersonalReadingById)
 app.get('/personalReading/getPersonalReading/:UserId/:LibraryId',
   PersonalReadingController.getPersonalReadingByLibraryUser)
 app.post('/personalReading/newPersonalReading/',
@@ -63,10 +67,17 @@ app.post('/personalReading/updateComment/:personalReadingId/:comment',
   PersonalReadingController.updateComment)
 app.get('/personalReading/findLastFinishedPersonalReading/:UserId',
   PersonalReadingController.findLastFinishedPersonalReading)
+app.get('/personalReading/findCurrentlyReadingPersonalReading/:UserId',
+  PersonalReadingController.findCurrentlyReadingPersonalReading)
+app.get('/personalReading/findBooksReadFromLibraries/:UserId',
+  PersonalReadingController.findBooksReadFromLibraries)
+app.get('/personalReading/findAverages/:UserId',
+  PersonalReadingController.findAverages)
   
 app.get('/loan/getAll',
   LoanController.getAll)
 app.post('/loan/create',
   LoanController.createLoan)
-  
+app.get('/loan/getLoansByUserId/:UserId',
+  LoanController.getLoansByUserId) 
 }

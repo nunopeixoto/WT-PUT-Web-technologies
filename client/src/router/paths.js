@@ -60,6 +60,11 @@ export default [
     view: 'AddBookAutomaticPanel'
   },
   {
+    path: '/your-books',
+    name: 'Your books',
+    view: 'YourBooks'
+  },
+  {
     path: '/add-loan',
     name: 'Add a loan',
     view: 'AddLoan'

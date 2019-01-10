@@ -32,6 +32,12 @@
         <br>
         <v-divider/>
         </div>
+        <v-list-tile  v-if="this.$store.state.isUserLoggedIn" to="/dashboard" :active-class="color" avatar class="v-list-item">
+            <v-list-tile-action>
+              <v-icon>mdi-view-dashboard</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Dashboard</v-list-tile-title>
+          </v-list-tile>
         <v-list-tile  v-if="this.$store.state.isUserLoggedIn && !this.$store.state.userHasLibrary" to="/create-library" :active-class="color" avatar class="v-list-item">
             <v-list-tile-action>
               <v-icon>mdi-library-plus</v-icon>
@@ -50,6 +56,12 @@
             </v-list-tile-action>
             <v-list-tile-title>Add book</v-list-tile-title>
           </v-list-tile>
+          <v-list-tile  v-if="this.$store.state.isUserLoggedIn && (this.$store.state.userHasLibrary || this.$store.state.userIsPartOfLibrary)" to="/your-books" :active-class="color" avatar class="v-list-item">
+            <v-list-tile-action>
+              <v-icon>mdi-book-plus</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>Your books</v-list-tile-title>
+          </v-list-tile>
           <v-list-tile  v-if="this.$store.state.isUserLoggedIn && (this.$store.state.userHasLibrary || this.$store.state.userIsPartOfLibrary)" to="/add-loan" :active-class="color" avatar class="v-list-item">
             <v-list-tile-action>
               <v-icon>mdi-checkbook</v-icon>
@@ -64,13 +76,7 @@
             <v-list-tile-title v-text="link.text" />
           </v-list-tile>
         </v-flex>
-        <v-flex v-if="this.$store.state.isUserLoggedIn">       
-        <v-list-tile v-for="(link, i) in linksLoggedIn" :key="i" :to="link.to" :active-class="color" avatar class="v-list-item">
-          <v-list-tile-action>
-            <v-icon>{{ link.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title v-text="link.text" />
-        </v-list-tile>
+        <v-flex>       
         </v-flex>
         <v-list-tile  v-if="this.$store.state.isUserLoggedIn" :active-class="color" avatar class="v-list-item" @click="logout">
           <v-list-tile-action>
@@ -112,43 +118,6 @@ import store from '@/store/index'
           to: '/login',
           icon: 'mdi-account',
           text: 'Login'
-        }
-      ],
-      linksLoggedIn: [
-        {
-          to: '/dashboard',
-          icon: 'mdi-view-dashboard',
-          text: 'Dashboard'
-        },
-        {
-          to: '/user-profile',
-          icon: 'mdi-account',
-          text: 'User Profile'
-        },
-        {
-          to: '/table-list',
-          icon: 'mdi-clipboard-outline',
-          text: 'Table List'
-        },
-        {
-          to: '/typography',
-          icon: 'mdi-format-font',
-          text: 'Typography'
-        },
-        {
-          to: '/icons',
-          icon: 'mdi-chart-bubble',
-          text: 'Icons'
-        },
-        {
-          to: '/maps',
-          icon: 'mdi-map-marker',
-          text: 'Maps'
-        },
-        {
-          to: '/notifications',
-          icon: 'mdi-bell',
-          text: 'Notifications'
         }
       ],
       responsive: false

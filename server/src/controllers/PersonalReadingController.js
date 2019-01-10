@@ -1,5 +1,6 @@
+/* eslint-disable */
 const {PersonalReading} = require('../models')
-
+const {Book} = require('../models')
 module.exports = {
   async getAllPersonalReading(req, res) {
     try {
@@ -7,11 +8,25 @@ module.exports = {
         res.send(PersonalReadings)
       } catch (err) {
         res.status(400).send({
-          error: 'Error listing books'
+          error: 'Error finding personal readings.'
         })
       }
-    },
-  async getPersonalReadingByLibraryUser(req, res) {
+  },
+  async getPersonalReadingById(req, res) {
+      try {
+          const personalreading = await PersonalReading.findOne({
+            where : {
+              id: req.params.PersonalReadingId
+            }
+          })
+          res.send(personalreading)
+        } catch (err) {
+          res.status(400).send({
+            error: 'Error finding personal reading.'
+          })
+        }
+    }, 
+    async getPersonalReadingByLibraryUser(req, res) {
       try {
         const user = req.params.UserId
         console.log(user)
@@ -120,13 +135,109 @@ module.exports = {
   },
   async findLastFinishedPersonalReading(req, res) {
     try {
-      const lastFinishedPersonalReading = await PersonalReading.findAll({where: {UserId: req.params.UserId}, limit: 1, order: [['endDate', 'DESC']]})
+      const lastFinishedPersonalReading = await PersonalReading.findAll({where:
+         {UserId: req.params.UserId,
+        reading: 1},
+          limit: 1, order: [['endDate', 'DESC']]})
 
       res.send(lastFinishedPersonalReading)
     } catch (err) {
       console.log(err)
       res.status(400).send({
         error: 'Error finding last finished book.'
+      })
+    }
+  },
+  async findCurrentlyReadingPersonalReading (req, res) {
+    try {
+      const currentlyReadingPersonalReading = await PersonalReading.findAll({
+        where: 
+        {UserId: req.params.UserId,
+        reading: 2}, 
+        limit: 1, order: [['startDate', 'DESC']]})
+
+      res.send(currentlyReadingPersonalReading)
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({
+        error: 'Error finding current book.'
+      })
+    }
+  },
+  async findBooksReadFromLibraries (req, res) {
+    try {
+      const findBooksReadFromLibraries = await PersonalReading.findAndCountAll({
+        where: {
+          UserId: req.params.UserId,
+          reading : 1
+        }
+        })
+      const findAllBooks = await PersonalReading.findAndCountAll({
+          where: {
+            UserId: req.params.UserId,
+          }
+          })
+
+      res.send({
+        booksRead: findBooksReadFromLibraries.count,
+        totalBooks: findAllBooks.count
+      })
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({
+        error: 'Error finding current book.'
+      })
+    }
+  },
+  async findAverages (req, res) {
+    try {
+      const Sequelize = require('sequelize')
+      const config = require('../config/config')
+      const userId = req.params.UserId
+      const sequelize = new Sequelize(
+        config.db.database,
+        config.db.user,
+        config.db.password,
+        config.db.options
+      )
+
+      var nrPages = 0
+      var nrDays = 0
+      var nrMonths = 0
+      const books = await Book.findAll({
+        where : {
+          id: userId
+        }
+      })
+      
+     books.forEach(function(obj){
+       nrPages += obj.nrPages
+     })
+     sequelize.query(`SELECT SUM((julianday(endDate) - julianday(startDate))) AS nrDays FROM PersonalReadings where reading = 1 AND UserId = ${userId};`, { type: sequelize.QueryTypes.SELECT})
+       .then(function(result) {
+         nrDays = result[0].nrDays
+         if (nrDays) {
+          nrMonths = (nrDays / 30).toFixed(2)
+          averagePagesMonth = +((nrPages / nrMonths).toFixed(2))
+          res.send({
+            nrDays: nrDays,
+            nrPages: nrPages,
+            averagePagesDay: Math.round(nrPages / nrDays),
+            averagePagesMonth: averagePagesMonth
+          })
+        } else {
+          res.send({
+            nrDays: 0,
+            nrPages: nrPages,
+            averagePagesDay: 0,
+            averagePagesMonth: 0
+          })
+        }
+       })
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({
+        error: 'Error finding current book.'
       })
     }
   }

@@ -12,5 +12,8 @@ export default {
   },
   getUserByEmailOrUsername (query) {
     return Api().get(`getUserByEmailOrUsername/${query}`)
+  },
+  getUserById (UserId) {
+    return Api().get(`getUserById/${UserId}`)
   }
 }

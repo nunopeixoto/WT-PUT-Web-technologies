@@ -84,75 +84,47 @@
 </template>
         </material-chart-card>
       </v-flex> -->
-      <v-flex sm6 xs12 md6 lg3>
-        <material-stats-card color="green" icon="mdi-book" title="Last finished book" :value="this.lastFinishedBook.title" sub-icon="mdi-calendar" :sub-text="this.lastFinishedBook.endDate"/>
+      <!-- stats card -->
+      <v-flex sm6 xs12 md6 lg3 >
+        <material-stats-card color="info" icon="mdi-book-open" title="Average pages read per day" :value="this.averageBooksCard.averagePagesDay" sub-icon="mdi-update" :sub-text="this.averageBooksCard.averagePagesMonth"/>
       </v-flex>
       <v-flex sm6 xs12 md6 lg3>
-        <material-stats-card color="orange" icon="mdi-content-copy" title="Used Space" value="49/50" small-value="GB" sub-icon="mdi-alert" sub-icon-color="error" sub-text="Get More Space..." sub-text-color="text-primary"/>
+        <material-stats-card color="orange" icon="mdi-library" title="Books read from libraries" :value="this.booksReadFromLibrariesCard.valueText" small-value="Books" sub-icon="mdi-read" :sub-text="this.booksReadFromLibrariesCard.subtext"/>
       </v-flex>
       <v-flex sm6 xs12 md6 lg3>
-        <material-stats-card color="red" icon="mdi-information-outline" title="Fixed Issues" value="75" sub-icon="mdi-tag" sub-text="Tracked from Github"/>
+        <v-tooltip bottom>
+          <material-stats-card slot="activator" color="red" icon="mdi-book" title="Currently reading" :value="this.currentlyReadingCard.bookName" sub-icon="mdi-library" :sub-text="this.currentlyReadingCard.libraryName"/>
+          <span style="font-size:20px; color:white;">{{this.currentlyReadingCard.bookNameComplete}}</span>
+        </v-tooltip>
       </v-flex>
-      <v-flex
-        sm6
-        xs12
-        md6
-        lg3
-      >
-        <material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-update"
-          sub-text="Just Updated"
-        />
+      <v-flex sm6 xs12 md6 lg3>
+        <v-tooltip bottom>
+          <material-stats-card slot="activator" color="green" icon="mdi-check" title="Last finished book" :value="this.lastFinishedBook.title" sub-icon="mdi-calendar" :sub-text="this.lastFinishedBook.endDate"/>
+          <span style="font-size:20px; color:white;">{{this.lastFinishedBook.titleComplete}}</span>
+        </v-tooltip>
       </v-flex>
-      <v-flex
-        md12
-        lg12
-      >
-        <material-card
-          color="green"
-          title="Your books"
-          text="Manage all the books you have from all librarys you're a member."
-        >
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Search"
-          single-line
-          style="max-width:200px;"
-          hide-details
-        ></v-text-field>
-          <v-data-table
-            :headers="headers"
-            :items="books"
-            :search="search"
-          >
+      <!-- search texfield + datatable -->
+      <v-flex md12 lg12>
+        <material-card color="green" title="Your loans" text="Manage all the loans you're a part of.">
+        <v-text-field v-model="search" append-icon="search" label="Search" single-line style="max-width:200px;" hide-details></v-text-field>
+          <v-data-table :headers="headers" :items="activeLoans" :search="search"> 
 <template slot="headerCell" slot-scope="{ header }">
   <span class="font-weight-light text-warning text--darken-3" v-text="header.text" />
 </template>
 
 <template slot="items" slot-scope="props">
   <td style="display:none;">
-    {{ props.item.personalReadingId }}</td>
-  <td>{{ props.item.title }}</td>
-  <td>{{ props.item.authors }}</td>
-  <td>{{ props.item.numberpages }}</td>
-  <td>{{ props.item.library }}</td>
-  <td>
-    <v-icon small @click="editReading(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }}
-  </td>
-  <td>
-    <v-icon small @click="editComment(props.item)" color="indigo">edit</v-icon> {{ props.item.comment }}
-  </td>
+    {{ props.item.loanId }}</td>
+  <td>{{ props.item.bookTitle }}</td>
+  <td>{{ props.item.from }}</td>
+  <td>{{ props.item.to }}</td>
+  <td>{{ props.item.startDate }}</td>
 </template>
           </v-data-table>
         </material-card>
       </v-flex>
     </v-layout>
-    <v-dialog v-model="dialogReading" max-width="700px">
+   <!-- <v-dialog v-model="dialogReading" max-width="700px">
           <v-card>
             <v-card-title>
               <span class="headline">Change the read status of {{editedItem.title}}</span>
@@ -162,7 +134,7 @@
               <v-container grid-list-md>
                 <v-layout wrap>
                   <v-flex xs12 sm6 md4>
-                    <!-- <v-text-field v-model="editedItem.reading" label="Calories"></v-text-field> -->
+                    <!-- <v-text-field v-model="editedItem.reading" label="Calories"></v-text-field> 
                           <v-select v-model="editedItem.reading" v-bind:items="this.optionsRead" label="Read status" ></v-select>
                           <v-dialog ref="dialogStart" v-if="editedItem.reading=='Reading in progress'" v-model="modalStart" :return-value.sync="date" persistent lazy full-width width="290px">
                       <v-text-field slot="activator" v-model="date" label="Started in" prepend-icon="event" readonly></v-text-field>
@@ -211,20 +183,36 @@
           <v-btn color="blue darken-1" flat @click="saveComment">Save</v-btn>
          </v-card-actions>
         </v-card>
-        </v-dialog>
+        </v-dialog> -->
   </v-container>
 </template>
 
 <script>
   import PersonalReadingService from '@/services/PersonalReadingService'
   import BookService from '@/services/BookService'
+  import LoanService from '@/services/LoanService'
   import LibraryService from '@/services/LibraryService'
+  import AuthenticationService from '@/services/AuthenticationService'
   export default {
     data() {
       return {
+        averageBooksCard: {
+          averagePagesMonth: '',
+          averagePagesDay: '',
+        },
         lastFinishedBook: {
           endDate: '',
-          title: ''
+          title: '',
+          titleComplete: ''
+        },
+        currentlyReadingCard: {
+          bookName: '',
+          bookNameComplete: '',
+          libraryName: ''
+        },
+        booksReadFromLibrariesCard : {
+          valueText: null,
+          subtext: null,
         },
         dialogReading: false,
         dialogComment: false,
@@ -317,43 +305,30 @@
             class: 'idcolumn',
             sortable: true,
             text: 'Id',
-            value: 'personalReadingId',
+            value: 'loanId',
           },
           {
             sortable: false,
-            text: 'Title',
-            value: 'title'
+            text: 'Book',
+            value: 'booktitle'
           },
           {
             sortable: false,
-            text: 'Author(s)',
-            value: 'authors'
+            text: 'From',
+            value: 'from'
           },
           {
             sortable: true,
-            text: 'Number of pages',
-            value: 'numberpages'
+            text: 'To',
+            value: 'to'
           },
           {
             sortable: true,
-            text: 'Library',
-            value: 'library'
-          },
-          {
-            sortable: false,
-            text: 'Read status',
-            value: 'reading',
-            align: 'right'
-          },
-          {
-            sortable: false,
-            text: 'Comment',
-            value: 'comment',
-            align: 'right'
+            text: 'Start date',
+            value: 'startDate'
           }
         ],
-        books: [],
-        optionsRead: ['Not read', 'Finished', 'Reading in progress'],
+        activeLoans: [],
         list: {
           0: false,
           1: false,
@@ -402,7 +377,6 @@
             }
             await PersonalReadingService.updateReading(personalReadingId, reading, dateToSend)
             Object.assign(this.books[this.editedIndex], this.editedItem)
-            alert('hey')
           } else {
             this.books.push(this.editedItem)
           }
@@ -442,10 +416,67 @@
       },
       async findLastFinishedBook(){
         try {
-          const lastFinishedPersonalReading = await PersonalReadingService.findLastFinishedPersonalReading(this.$store.state.user.id)
-          const lastBook = (await BookService.getBookById(lastFinishedPersonalReading.data[0].BookId)).data
-          this.lastFinishedBook.title = lastBook.title 
-          this.lastFinishedBook.endDate = 'Finished in ' +lastFinishedPersonalReading.data[0].endDate
+            const lastFinishedPersonalReading = await PersonalReadingService.findLastFinishedPersonalReading(this.$store.state.user.id)
+            if (lastFinishedPersonalReading.data.length==1){
+            const lastBook = (await BookService.getBookById(lastFinishedPersonalReading.data[0].BookId)).data
+            this.lastFinishedBook.titleComplete = lastBook.title
+            let bookTitle = null
+            if(lastBook.title.length > 24){
+              bookTitle = lastBook.title.substring(0,20) +'...'
+            } else {
+              bookTitle = lastBook.title
+            }
+            this.lastFinishedBook.title = bookTitle
+            this.lastFinishedBook.endDate = 'Finished in ' +lastFinishedPersonalReading.data[0].endDate
+          } else {
+            this.lastFinishedBook.title = 'No finished book.'
+            this.lastFinishedBook.endDate = 'None'
+          }
+        } catch (err) {
+          alert(err)
+        }
+      },
+      async findCurrentlyReadingBook(){
+        try {
+          const currentlyReadingPersonalReading = await PersonalReadingService.findCurrentlyReadingPersonalReading(this.$store.state.user.id)
+          if (currentlyReadingPersonalReading.data.length==1){
+            const currentBook = (await BookService.getBookById(currentlyReadingPersonalReading.data[0].BookId)).data
+            const currentLibrary = (await LibraryService.getLibraryById(currentlyReadingPersonalReading.data[0].LibraryId)).data 
+            this.currentlyReadingCard.bookNameComplete = currentBook.title
+            let BookName = null
+            if(currentBook.title.length > 24) {
+              BookName = currentBook.title.substring(0, 20) + '...'
+            } else {
+              BookName = currentBook.title
+            }
+            this.currentlyReadingCard.bookName =  BookName
+            this.currentlyReadingCard.libraryName = 'From ' +currentLibrary.name
+          } else {
+            this.currentlyReadingCard.bookName =  'None'
+            this.currentlyReadingCard.libraryName = 'None'
+          }
+        } catch (err) {
+          alert(err)
+        }
+      },
+      async findBooksReadFromLibraries(){
+        try {
+          const booksReadFromLibraries = (await PersonalReadingService.findBooksReadFromLibraries(this.$store.state.user.id)).data
+          let booksRead = booksReadFromLibraries.booksRead
+          let totalBooks = booksReadFromLibraries.totalBooks
+          let percentage = Math.round((booksRead / totalBooks ) * 100)
+          this.booksReadFromLibrariesCard.valueText= booksRead+'/'+totalBooks
+          this.booksReadFromLibrariesCard.subtext = `It looks like you've read ${percentage}% of your books.`
+        } catch (err) {
+          alert(err)
+        }
+      },
+      async findAverages(){
+        try {
+          const averages = (await PersonalReadingService.findAverages(this.$store.state.user.id)).data
+          this.averageBooksCard.averagePagesDay = averages.averagePagesDay+''
+          this.averageBooksCard.averagePagesMonth = `Which means you've been reading ${averages.averagePagesMonth} pages per month.`
+          
         } catch (err) {
           alert(err)
         }
@@ -453,29 +484,46 @@
     },
     async mounted() {
       this.findLastFinishedBook()
-      this.books = []
-      const response = (await PersonalReadingService.getPersonalReadingByLibraryUser(this.$store.state.user.id, 0)).data
+      this.findCurrentlyReadingBook()
+      this.findBooksReadFromLibraries()
+      this.findAverages()
+      this.activeLoans = []
+      const response = (await LoanService.getLoansByUserId(this.$store.state.user.id, 0)).data
       for (var i = 0; i < response.length; i++) {
         var obj = response[i]
-        var bookId = obj['BookId']
-        const book = (await BookService.getBookById(bookId)).data
-        let reading = ''
-        if (obj['reading'] == 0) {
-          reading = 'Not read'
-        } else if (obj['reading'] == 1) {
-          reading = 'Finished in ' + obj['endDate']
-        } else if (obj['reading'] == 2) {
-          reading = 'Started in ' + obj['startDate']
+        if (obj['ExternalBookId'] == null) {
+          var personalReading = (await PersonalReadingService.getPersonalReadingById(obj['PersonalReadingId'])).data
+          var bookId = personalReading.BookId
+          const book = (await BookService.getBookById(bookId)).data
+          var from = this.$store.state.user.username
+          var to = (await AuthenticationService.getUserById(obj['UserBorrowerId'])).data
+          var toUsername = ''
+          if (obj['UserBorrowerId'] == null ) {
+            toUsername = obj['status'].substring(8, obj['status'].length)
+          } else {
+            toUsername = '@'+to.username
+          }
+          var startDate = obj['startDate']
+          this.activeLoans.push({
+            loanId: obj['id'],
+            bookTitle: book.title,
+            from: '@'+from,
+            to: toUsername,
+            startDate: startDate.substring(0,10)
+          })
+        } else {
+          const book = (await BookService.getBookById(obj['ExternalBookId'])).data
+          var from = obj['status'].substring(10, obj['status'].length)
+          var to = '@'+this.$store.state.user.username
+          var startDate = obj['startDate']
+          this.activeLoans.push({
+            loanId: obj['id'],
+            bookTitle: book.title,
+            from: from,
+            to: to,
+            startDate: startDate.substring(0,10)
+          })
         }
-        this.books.push({
-          personalReadingId: obj['id'],
-          title: book.title,
-          authors: book.authors,
-          numberpages: book.nrPages,
-          library: (await LibraryService.getLibraryById(obj['LibraryId'])).data.name,
-          reading: reading,
-          comment: obj['comment'].substring(0, 25),
-        })
       }
       var x = document.getElementsByClassName("idcolumn")
       x[0].style.display = "none"

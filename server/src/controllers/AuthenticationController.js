@@ -66,6 +66,22 @@ module.exports = {
       })
     }
   },
+  async getUserById (req, res) {
+    try {
+      const user = await User.findOne({
+        where : {
+          id: req.params.UserId
+        }
+      })
+      
+      res.send(user)
+    } catch (err) {
+      console.log(err)
+      res.status(400).send({
+        error: 'Error finding user.'
+      })
+    }
+  },
   async register(req, res) {
     try {
       const user = await User.create(req.body)
