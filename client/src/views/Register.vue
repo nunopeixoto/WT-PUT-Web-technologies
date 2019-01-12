@@ -66,6 +66,12 @@ export default {
           this.error = error.response.data.error
         }
       }
+    },
+    mounted () {
+      if (this.$store.state.isUserLoggedIn){
+        this.$router.push('Dashboard')
+      }
+
     }
   }
 </script>

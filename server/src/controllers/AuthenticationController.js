@@ -84,10 +84,20 @@ module.exports = {
   },
   async register(req, res) {
     try {
+      const checkUsername = await User.findOne({
+        where : {
+          username: req.body.username
+        }
+      })
+      
+      if (checkUsername) {
+        return res.status(400).send({
+          error: 'This username is already in use.'
+        })
+      }
       const user = await User.create(req.body)
       const userJson = user.toJSON()
       const token = jwtSignUser(userJson)
-      //console.log('TOKENNNNNNNNNNNNNNNNNN:'+ token)
       res.send({
         user: userJson,
         token: token
@@ -103,15 +113,14 @@ module.exports = {
       }
           
 
-          transporter.sendMail(HelperOptions, (error, info) => {
-            if (error){
-              return console.log(error)
-            }
-            console.log('message send')
-            console.log(info)
-          })
-          //console.log('email token: '+token) 
+      transporter.sendMail(HelperOptions, (error, info) => {
+        if (error){
+            return console.log(error)
+        }
+        console.log(info)
+      })
     } catch (err) {
+      console.log(err)
       res.status(400).send({
         error: 'This email account is already in use.'
       })
@@ -127,6 +136,7 @@ module.exports = {
         token: token
       })
     } catch (err) {
+      console.log(err)
       res.status(400).send({
         error: 'This email account is already in use.'
       })
@@ -218,6 +228,20 @@ module.exports = {
       })
     }
   }
-
-  
 }
+
+//every day at midnight runs a function that deleted all users that have been registered for more than a day without activating their account.
+var schedule = require('node-schedule')
+schedule.scheduleJob('0 0 * * *', function(){
+  const Sequelize = require('sequelize')
+      const config = require('../config/config')
+      const sequelize = new Sequelize(
+        config.db.database,
+        config.db.user,
+        config.db.password,
+        config.db.options
+      )
+      // eslint-disable-next-line
+      sequelize.query(`DELETE FROM users WHERE confirmed = 0 AND ((julianday('now') - julianday(createdAt)) > 1);`, { type: sequelize.QueryTypes.SELECT})
+
+})

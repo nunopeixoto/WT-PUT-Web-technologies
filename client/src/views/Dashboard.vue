@@ -5,6 +5,11 @@
 <template>
   <v-container fill-height fluid grid-list-xl>
     <v-layout wrap>
+      <v-snackbar color="success"  :top="top" v-model="snackbar" dark>
+              <!-- <v-icon color="white" class="mr-3">mdi-bell-plus</v-icon> -->
+              <div>Hello <b>@{{this.$store.state.user.username}}</b>! Welcome to myLibrary app. </div>
+              <v-icon size="16" @click="snackbar = false">mdi-close-circle</v-icon>
+            </v-snackbar>
       <!-- <v-flex
               md12
               sm12
@@ -196,6 +201,8 @@
   export default {
     data() {
       return {
+        snackbar: false,
+        top:true,
         averageBooksCard: {
           averagePagesMonth: '',
           averagePagesDay: '',
@@ -445,7 +452,7 @@
             this.currentlyReadingCard.bookNameComplete = currentBook.title
             let BookName = null
             if(currentBook.title.length > 24) {
-              BookName = currentBook.title.substring(0, 20) + '...'
+              BookName = currentBook.title.substring(0, 19) + '...'
             } else {
               BookName = currentBook.title
             }
@@ -482,6 +489,17 @@
         }
       }
     },
+    beforeRouteEnter (to, from, next) {
+      next(vm => {
+        if (from.path === '/login') {
+          vm.snackbar=true
+        } else {
+          vm.snackbar = false
+        }
+
+        next()
+      })
+    }, 
     async mounted() {
       this.findLastFinishedBook()
       this.findCurrentlyReadingBook()
@@ -495,7 +513,7 @@
           var personalReading = (await PersonalReadingService.getPersonalReadingById(obj['PersonalReadingId'])).data
           var bookId = personalReading.BookId
           const book = (await BookService.getBookById(bookId)).data
-          var from = this.$store.state.user.username
+          var from = (await AuthenticationService.getUserById(obj['UserLenterId'])).data
           var to = (await AuthenticationService.getUserById(obj['UserBorrowerId'])).data
           var toUsername = ''
           if (obj['UserBorrowerId'] == null ) {
@@ -507,7 +525,7 @@
           this.activeLoans.push({
             loanId: obj['id'],
             bookTitle: book.title,
-            from: '@'+from,
+            from: '@'+from.username,
             to: toUsername,
             startDate: startDate.substring(0,10)
           })

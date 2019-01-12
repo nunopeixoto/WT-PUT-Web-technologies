@@ -69,7 +69,6 @@ module.exports = {
   },
   async search(req, res) {
     try {
-      console.log('eqwoweqweqiweqiewqiweq'+req.params.query)
       var options = {
         type: 'books'
       }
@@ -79,11 +78,10 @@ module.exports = {
           results = _.map(results, function(object) {
             return _.pick(object, ['title', 'subtitle', 'authors', 'publishedDate', 'pageCount', 'publisher', 'language', 'thumbnail'])
           })
-          console.log(results)
            res.send(results)
         } else {
           res.status(400).send({
-            error: 'Error creating book.'
+            error: 'Error finding book.'
           })
         }
     })

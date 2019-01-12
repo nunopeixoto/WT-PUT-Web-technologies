@@ -2,7 +2,7 @@
 /* eslint-disable */
 </script>
 <template>
-  <panel title="Add book manually">
+  <panel title="AddBookManuallyPanel">
     <v-flex xs12 md12>
       <v-text-field label="Title"  required :rules="[required]" v-model="book.title"></v-text-field>
     </v-flex>
@@ -18,7 +18,7 @@
     </v-flex> -->
     <v-flex xs12 sm6 md4>
         <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent lazy full-width width="290px">
-          <v-text-field slot="activator" v-model="date" label="Picker in dialog" prepend-icon="event" readonly>
+          <v-text-field slot="activator"   v-model="date" label="Picker in dialog" prepend-icon="event" readonly>
           </v-text-field>
           <v-date-picker v-model="date" scrollable>
             <v-spacer></v-spacer>
@@ -38,6 +38,27 @@
     </v-flex>
     <v-flex xs12 md12>
       <v-text-field label="Thumbnail URL" required :rules="[required]"  v-model="book.thumbnailUrl"></v-text-field>
+    </v-flex>
+    <v-flex xs12 ms6 md4>
+      <v-select :items="optionsReading" v-model="reading" label="Reading status"></v-select>
+      <v-dialog v-if="this.reading==this.optionsReading[0] || this.reading==this.optionsReading[2]" ref="dialogStart" v-model="modalStart" :return-value.sync="date" persistent lazy full-width width="290px">
+          <v-text-field slot="activator" v-model="dateStart" label="Start date" prepend-icon="event" readonly>
+          </v-text-field>
+          <v-date-picker v-model="dateStart" scrollable>
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="modalStart = false">Cancel</v-btn>
+            <v-btn flat color="primary" @click="$refs.dialogStart.save(date)">OK</v-btn>
+          </v-date-picker>
+      </v-dialog>
+      <v-dialog v-if="this.reading==this.optionsReading[0]" ref="dialogEnd" v-model="modalEnd" :return-value.sync="date" persistent lazy full-width width="290px">
+          <v-text-field slot="activator" v-model="dateEnd" label="Finish date" prepend-icon="event" readonly>
+          </v-text-field>
+          <v-date-picker v-model="dateEnd" scrollable>
+            <v-spacer></v-spacer>
+            <v-btn flat color="primary" @click="modalEnd = false">Cancel</v-btn>
+            <v-btn flat color="primary" @click="$refs.dialogEnd.save(date)">OK</v-btn>
+          </v-date-picker>
+        </v-dialog>  
     </v-flex>
     <br><br>
     <v-alert v-if="success" :value="true" type="success">
@@ -71,9 +92,10 @@
 <script>
   import BookService from '@/services/BookService'
   import PersonalReadingService from '@/services/PersonalReadingService'
-  import Datepicker from 'vuejs-datepicker';
+  import Datepicker from 'vuejs-datepicker'
   
   export default {
+    name: 'book-manually',
     components: {
       Datepicker
     },
@@ -89,11 +111,18 @@
             language: null,
             thumbnailUrl : null
           },
+          reading: null,
+          optionsReading : ['I already have read this book', 'I haven\'t started it yet.', 'I\'ve started but I haven\'t finshed yet.'],
           date: null,
+          dateStart: null,
+          dateEnd: null,
           modal: false,
+          modalStart: null,
+          modalEnd: null,
           error: null,
           success: null,
           dialog: false,
+          dialogStart: false,
           //datepicker : false,
           required: (value) => !!value || 'Required.'
         }
@@ -112,6 +141,20 @@
               this.dialog = false
               return
             }
+          let readingStatus = 0
+          let startDate = null
+          let endDate = null
+          if (this.reading == this.optionsReading[0]){
+            readingStatus = 1
+            startDate = this.dateStart
+            endDate = this.dateEnd
+          } else if (this.reading == this.optionsReading[1]) {
+            readingStatus = 0
+          } else if (this.reading == this.optionsReading[2]) {
+            readingStatus = 2
+            startDate = this.dateStart
+          }
+          alert(readingStatus )
           try {
             const responseBook = await BookService.createBook(this.book)
             let personalReadingResponse = null
@@ -119,13 +162,19 @@
               personalReadingResponse = await PersonalReadingService.createPersonalReading({
               LibraryId : this.$store.state.library.id,
               UserId : this.$store.state.user.id,
-              BookId : this.$route.params.BookId
+              BookId : this.$route.params.BookId,
+              reading: readingStatus,
+              startDate: startDate,
+              endDate: endDate
             })
             } else {
             personalReadingResponse = await PersonalReadingService.createPersonalReading({
               LibraryId : this.$store.state.library.id,
               UserId : this.$store.state.user.id,
-              BookId : responseBook.data.id
+              BookId : responseBook.data.id,
+              reading: readingStatus,
+              startDate: startDate,
+              endDate: endDate
             })
             
             }
@@ -141,7 +190,27 @@
       rules: {
         required: (value) => !!value || 'Required.'
       },
+      watch: {
+        'this.$route.params.book': {
+          immediate: true,
+          async handler(value) {
+            alert(value)
+            alert('hey')
+          // const bookApi = (Buffer.from(this.$route.params.Book, 'base64').toString('ascii'))
+          // const bookJson = JSON.parse(bookApi)
+          // this.book.title = bookJson.title
+          // this.book.subtitle = bookJson.subtitle
+          // this.book.authors =  JSON.stringify(bookJson.authors).replace(/"/g,'').replace(/\[/,'').replace(/\]/, '').replace(/,/,', ')
+          // this.book.publishDate = bookJson.publishedDate.substring(0,10)
+          // this.book.nrPages = bookJson.pageCount
+          // this.book.publisher =bookJson.publisher
+          // this.book.language = bookJson.language
+          // this.book.thumbnailUrl = bookJson.thumbnail
+          }
+        }
+      },
       async mounted () {
+        alert('tabs'+this.$parent.tabs)
         if (this.$route.params.BookId){
           let bookId = this.$route.params.BookId
           const book = await BookService.getBookById(bookId)

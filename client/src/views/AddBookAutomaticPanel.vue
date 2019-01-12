@@ -1,44 +1,52 @@
 <script> /* eslint-disable */ </script>
 <template>
 <panel title="Add book automatically">
-  <v-form>
-    <v-container>
-      <v-layout row wrap>
-        <v-flex xs6 offset-xs3 >
-            <div class="search-wrapper">
-            <h3> Search book </h3>
-            <v-text-field label="Search by title or author" v-model="search"></v-text-field>
-            <v-btn dark class="cyan" @click="changeContainers"> Didn't find what you were looking for? </v-btn>
-  </div>
-  <br>
-  <v-container v-if="this.dbContainer">
-  <h3> Books added by other users</h3>
+  <v-form><br>
+    <v-layout wrap>
+    <v-flex xs12 md4>
+    </v-flex>
+    <v-flex xs12 md4>
+        <v-text-field prepend-icon="mdi-magnify" label="Search book by title or author" v-model="search"></v-text-field> 
+    </v-flex>
+    </v-layout>
+    <v-flex xs12 md12>
+      <br>
+      <v-expansion-panel :value="this.openExpansionPanel">
+      <v-expansion-panel-content>
+        <div slot="header"><v-icon>mdi-account</v-icon> Added by our users</div>
+        <v-card>
   <div class="wrapper">
-    <div class="card" v-for="book in filteredListDb" :key="book.title">
-      <small>Author(s): {{ book.author }}</small>
-      <a v-bind:href="book.link" target="_blank">
+    <div class="card" v-for="book in filteredListDb" :key="book.title" @click="changeCard(book)">
+      <small><center>By: {{ book.author }}</center></small>
+      <!--<a v-bind:href="book.link" target="_blank">-->
+      <a>
         <img v-bind:src="book.img"/>
-        {{ book.title }}
+        <h5>{{ book.title }}</h5>
       </a>
     </div>
   </div>
-  </v-container>
-  <v-container v-if="this.apiContainer">
-    <h3> Books on our database </h3>
-  <div class="wrapper">
-    <div class="card" v-for="book in filteredListApi" :key="book.title">
-      <small>Author(s): {{ book.author }}</small>
-      <a v-bind:href="book.link" target="_blank">
-        <img v-bind:src="book.img"/>
-        {{ book.title }}
-      </a>
-    </div>
-  </div>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel focusable>
+    <v-expansion-panel-content>
+        <div slot="header"><v-icon>mdi-library-books</v-icon> Google Books database</div>
+        <v-card>
+          <div class="wrapper">
+            <div class="card" v-for="book in filteredListApi" :key="book.title" @click="changeCard(book)">
+              <small><center>By: {{ book.author }}</center></small>
+              <!-- <a v-bind:href="book.link" target="_blank"> -->
+              <a>
+                <img v-bind:src="book.img"/>
+                <h5>{{ book.title }}</h5>
+              </a>
+            </div>
+          </div>
   <v-btn dark class="cyan" router to='newbookmanually'> Still can't find it? Add it manually </v-btn>
-  </v-container>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
         </v-flex>
-      </v-layout>
-    </v-container>
   </v-form>
 </panel>
 </template>
@@ -47,13 +55,13 @@
 import BookService from '@/services/BookService'
 import _ from 'lodash'
 export default {
+  props: ['value'],
   data () {
     return {
       search: '',
-      dbContainer: true,
-      apiContainer: false,
       bookListDb : [],
-      bookListApi : []
+      bookListApi : [],
+      openExpansionPanel: 1
     }
   },
   methods: {
@@ -65,14 +73,10 @@ export default {
             console.log(error)
         }        
     },
-    changeContainers () {
-      if(this.apiContainer === false){
-        this.apiContainer = true
-        this.dbContainer = false
-      } else {
-        this.apiContainer = false
-        this.dbContainer = true
-      }
+    changeCard(book) {
+      alert(book)
+      let tabs = 0
+      this.$emit('input', tabs)
     }
   },
   watch : {
@@ -93,14 +97,27 @@ export default {
         for (var i = 0; i < results.length; i++){
           var obj = results[i]
           var BookId = obj['id']
+          let title = ''
+          let authors = ''
+          if (obj['title'].length > 49) {
+            title = obj['title'].substring(0, 49)+'(...)' 
+          } else {
+            title = obj['title']
+          }
+          if (obj['authors'].length > 25) {
+            authors = obj['authors'].substring(0, 20)+'(...)' 
+          } else {
+            authors = obj['authors']
+          }
           var URL = `http://localhost:8080/add-book/${BookId}?tab=0`
           var dbbook = new Book(
-              obj['title'],
+              title,
               URL, 
-              obj['authors'],
+              authors,
               obj['thumbnailUrl']
           )
           this.bookListDb.push(dbbook)       //add new book to the array
+          this.openExpansionPanel = 0
         }
         //SEARCH API
         const resultsApi = (await BookService.searchApi(this.search)).data  //search the db for books with same title
@@ -111,11 +128,26 @@ export default {
           // var BookId = obj['id']
           const cenas = Buffer.from(JSON.stringify(obj)).toString('base64')
           var URL = `http://localhost:8080/add-book/api/${cenas}`
-          var authorsString = JSON.stringify(obj['authors']).replace(/"/g,'').replace(/\[/,'').replace(/\]/, '') //remove all brackets and quotations marks from string
+          let authorsString = ''
+          if (obj['authors'] != undefined) {
+            authorsString = JSON.stringify(obj['authors']).replace(/"/g,'').replace(/\[/,'').replace(/\]/, '') //remove all brackets and quotations marks from string
+          }
+          let title = ''
+          if (obj['title'].length > 49) {
+            title = obj['title'].substring(0, 49)+'(...)' 
+          } else {
+            title = obj['title']
+          }
+          let authors = ''
+          if (authorsString.length > 25) {
+            authors = authorsString.substring(0, 20)+'(...)' 
+          } else {
+            authors = authorsString
+          }
           var newBookApi = new Book(
-              obj['title'],
+              title,
               URL, 
-              authorsString,
+              authors,
               obj['thumbnail']
           )
           this.bookListApi.push(newBookApi)       //add new book to the array
@@ -134,13 +166,21 @@ export default {
   computed: {
     filteredListDb() {
       return this.bookListDb.filter(book => {
-          return book.title.toLowerCase().includes(this.search.toLowerCase())
+          if (this.search != undefined) {
+            return book.title.toLowerCase().includes(this.search.toLowerCase())
+          } else {
+            return ''
+          }
       })
     },
     filteredListApi() {
-      return this.bookListApi.filter(book => {
-        return book.title.toLowerCase().includes(this.search.toLowerCase())
-      })
+      if (this.search != undefined) {
+        return this.bookListApi.filter(book => {
+          return book.title.toLowerCase().includes(this.search.toLowerCase())
+        })
+      } else {
+        return ''
+      }
     }
   }
 }
@@ -205,16 +245,20 @@ div#app {
 
   .wrapper {
     display: flex;
-    //max-width: 444px;
-    width: 900px;
+    text-align:center;
+    max-width: 100%;
+    width: 1100px;
+    margin:0 auto;
     flex-wrap: wrap;
     padding-top: 12px;
   }
 
   .card {
     box-shadow: rgba(0, 0, 0, 0.117647) 0px 1px 6px, rgba(0, 0, 0, 0.117647) 0px 1px 4px;
-    max-width: 300px;
-    max-height: 300px;
+    width: 250px;
+    height: 400px;
+    max-width: 250px;
+    max-height: 275px;
     margin: 12px;
     transition: .15s all ease-in-out;
     &:hover {
@@ -229,7 +273,7 @@ div#app {
       flex-direction: column;
       align-items: center;
       img {
-        height: 100px;
+        height: 150px;
       }
       small {
         font-size: 10px;

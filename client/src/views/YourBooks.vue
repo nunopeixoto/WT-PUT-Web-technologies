@@ -27,7 +27,7 @@
   <td>{{ props.item.numberpages }}</td>
   <td>{{ props.item.library }}</td>
   <td>
-    <v-icon small @click="editReading(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }}
+    <v-icon v-if="props.item.reading=='Not read' || props.item.reading.substring(0,7) == 'Started'" small @click="editReading(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }}
   </td>
   <td>
     <v-icon small @click="editComment(props.item)" color="indigo">edit</v-icon> {{ props.item.comment }}

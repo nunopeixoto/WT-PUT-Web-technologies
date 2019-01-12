@@ -94,7 +94,7 @@
 </template>
 
 <script>
-  import AddBookManuallyPanel from './AddBookManuallyPanel'
+  import BookManually from './BookManually'
   import PersonalReadingService from '@/services/PersonalReadingService'
   import BookService from '@/services/BookService'
   import AuthenticationService from '@/services/AuthenticationService'
@@ -102,7 +102,7 @@
 
   export default {
     components: {
-      AddBookManuallyPanel
+      BookManually
     },
     data() {
       return {
