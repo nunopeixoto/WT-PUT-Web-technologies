@@ -61,10 +61,10 @@
         </v-dialog>  
     </v-flex>
     <br><br>
-    <v-alert v-if="success" :value="true" type="success">
+    <v-alert outline v-if="success" :value="true" type="success">
       {{success}}.
     </v-alert>
-    <v-alert  v-if="error" :value="true" type="error">
+    <v-alert outline  v-if="error" :value="true" type="error">
       {{error}}
     </v-alert>
     <br>

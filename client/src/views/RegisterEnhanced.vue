@@ -8,7 +8,7 @@
             <v-container py-0>
               <v-layout wrap>
                 <v-flex xs12 md12>
-                  <v-text-field label="Email" required :rules="[required]" v-model="email"></v-text-field>
+                  <v-text-field label="Email" required :rules="[required]" disabled v-model="email"></v-text-field>
                 </v-flex>
                 <v-flex xs12 md12>
                   <v-text-field label="Username" required :rules="[required]" type="text" v-model="username"></v-text-field>
@@ -16,10 +16,10 @@
                 <v-flex xs12 md12>
                   <v-text-field label="Password" required :rules="[required]" type="password" v-model="password" autocomplete="new-password"></v-text-field>
                 </v-flex>
-                <v-alert v-if="success" :value="true" type="success">
+                <v-alert outline v-if="success" :value="true" type="success">
                   {{success}}.
                 </v-alert>
-                <v-alert  v-if="error" :value="true" type="error">
+                <v-alert outline  v-if="error" :value="true" type="error">
                  {{error}}
                 </v-alert>
                 <v-flex xs12 text-xs-right>
@@ -61,14 +61,8 @@
             password: this.password,
             confirmed : true
           })
-         const cenas = await LibraryService.becomeLibraryGuest(this.$route.params.email, this.$route.params.libraryId)
-          // this.$store.dispatch('setTokegitn', response.data.token)
-          //this.$store.dispatch('setUser', response.data.user)
-         
+         const cenas = await LibraryService.becomeLibraryGuest(this.$route.params.email, this.$route.params.libraryId)     
           this.success = 'Your account was registered successfully'
-          // this.$router.push({
-          //   name: 'login'
-          // })
           if((cenas.data.message) == 'Success'){
             this.$router.push({
               path:'/login'

@@ -11,15 +11,27 @@
                   <v-text-field label="Email" required :rules="[required]" v-model="email"></v-text-field>
                 </v-flex>
                 <v-flex xs12 md12>
+                  <v-text-field label="Name" required :rules="[required]" v-model="name"></v-text-field>
+                </v-flex>
+                <v-flex xs12 md12>
+                  <v-text-field label="Surname" required :rules="[required]" v-model="surname"></v-text-field>
+                </v-flex>
+                <v-flex xs12 md12>
+                  <v-menu :close-on-content-click="false" v-model="datepicker" :nudge-right="40" lazy transition="scale-transition" offset-y full-width min-width="290px">
+                  <v-text-field slot="activator" v-model="birthDate" label="Birth date" prepend-icon="event" readonly></v-text-field>
+                  <v-date-picker v-model="birthDate" @input="datepicker = false"></v-date-picker>
+                </v-menu>
+                </v-flex>
+                <v-flex xs12 md12>
                   <v-text-field label="Username" required :rules="[required]" type="text" v-model="username"></v-text-field>
                 </v-flex>
                 <v-flex xs12 md12>
                   <v-text-field label="Password" required :rules="[required]" type="password" v-model="password" autocomplete="new-password"></v-text-field>
                 </v-flex>
-                <v-alert v-if="success" :value="true" type="success">
+                <v-alert outline v-if="success" :value="true" type="success">
                   {{success}}.
                 </v-alert>
-                <v-alert  v-if="error" :value="true" type="error">
+                <v-alert outline  v-if="error" :value="true" type="error">
                  {{error}}
                 </v-alert>
                 <v-flex xs12 text-xs-right>
@@ -42,10 +54,14 @@ export default {
     data() {
       return {
         email: '',
+        name: '',
+        surname: '',
+        birthDate: '',
         password: '',
         username: '',
         error: null,
         success: null,
+        datepicker: false,
         required: (value) => !!value || 'Required.'
       }
     },
@@ -56,7 +72,10 @@ export default {
           const response = await AuthenticationService.register({
             email: this.email,
             username: this.username,
-            password: this.password
+            password: this.password,
+            name: this.name, 
+            surname: this.surname,
+            birthDate: this.birthDate
           })
           // this.$store.dispatch('setTokegitn', response.data.token)
           this.$store.dispatch('setUser', response.data.user)

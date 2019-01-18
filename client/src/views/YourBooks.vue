@@ -6,34 +6,44 @@
   <v-container fill-height fluid grid-list-xl>
     <v-layout wrap>
       <!-- search texfield + datatable -->
-      <v-flex md12 lg12>
+      <v-flex md12 md8>
         <material-card color="green" title="Your books" text="Manage all the books you have from all librarys you're a member.">
-        <v-text-field v-model="search" append-icon="search" label="Search" single-line style="max-width:200px;" hide-details></v-text-field>
-          <v-data-table
-            :headers="headers"
-            :items="books"
-            :search="search"
-          >
-          
-<template slot="headerCell" slot-scope="{ header }">
-  <span class="font-weight-light text-warning text--darken-3" v-text="header.text" />
-</template>
-
-<template slot="items" slot-scope="props">
-  <td style="display:none;">
-    {{ props.item.personalReadingId }}</td>
-  <td>{{ props.item.title }}</td>
-  <td>{{ props.item.authors }}</td>
-  <td>{{ props.item.numberpages }}</td>
-  <td>{{ props.item.library }}</td>
-  <td>
-    <v-icon v-if="props.item.reading=='Not read' || props.item.reading.substring(0,7) == 'Started'" small @click="editReading(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }}
-  </td>
-  <td>
-    <v-icon small @click="editComment(props.item)" color="indigo">edit</v-icon> {{ props.item.comment }}
-  </td>
-</template>
+        <v-container py-0>
+              <v-layout wrap>
+                  <v-spacer></v-spacer>
+        <v-flex xs12 md3>
+          <v-text-field  v-model="search" append-icon="search" label="Search" single-line style="max-width:200px;"  hide-details ></v-text-field>   
+        </v-flex>
+        <v-flex xs12 md6></v-flex>
+        <v-flex xs12 md3  >
+         <v-btn style="position:absolute; right:40px;" color="green" @click="navigateTo({name: 'Add a book'})" dark class="mb-2">
+           Add new book
+        </v-btn>
+        </v-flex>
+      <v-flex xs12 md12>
+          <v-data-table :headers="headers" :items="books" :search="search">
+            <template slot="headerCell" slot-scope="{ header }">
+              <span class="font-weight-light text-warning text--darken-3" v-text="header.text" />
+            </template>
+            <template slot="items" slot-scope="props">
+              <td style="display:none;">
+                {{ props.item.personalReadingId }}</td>
+              <td> <img height="200%" width="50%" v-bind:src="props.item.img"/></td>
+              <td>{{ props.item.title }}</td>
+              <td>{{ props.item.authors }}</td>
+              <td>{{ props.item.numberpages }}</td>
+              <td>{{ props.item.library }}</td>
+              <td>
+                <v-icon v-if="props.item.reading=='Not read' || props.item.reading.substring(0,7) == 'Started'" small @click="editReading(props.item)" color="indigo">edit</v-icon> {{ props.item.reading }}
+              </td>
+              <td>
+                <v-icon small @click="editComment(props.item)" color="indigo">edit</v-icon> {{ props.item.comment }}
+              </td>
+            </template>
           </v-data-table>
+          </v-flex>
+        </v-layout>
+      </v-container>
         </material-card>
       </v-flex>
     </v-layout>
@@ -41,8 +51,7 @@
           <v-card>
             <v-card-title>
               <span class="headline">Change the read status of {{editedItem.title}}</span>
-            </v-card-title>
-  
+            </v-card-title> 
             <v-card-text>
               <v-container grid-list-md>
                 <v-layout wrap>
@@ -128,6 +137,12 @@
           },
           {
             sortable: false,
+            text: '',
+            value: 'img',
+            align: 'left'
+          },
+          {
+            sortable: false,
             text: 'Title',
             value: 'title'
           },
@@ -155,8 +170,7 @@
           {
             sortable: false,
             text: 'Comment',
-            value: 'comment',
-            align: 'right'
+            value: 'comment'
           }
         ],
         books: [],
@@ -176,6 +190,12 @@
       }
     },
     methods: {
+      navigateTo(route) {
+        this.$router.push(route)
+      },
+      submitMETHOD() {
+        alert('hey')
+      },
       complete(index) {
         this.list[index] = !this.list[index]
       },
@@ -267,6 +287,7 @@
         this.books.push({
           personalReadingId: obj['id'],
           title: book.title,
+          img: book.thumbnailUrl,
           authors: book.authors,
           numberpages: book.nrPages,
           library: (await LibraryService.getLibraryById(obj['LibraryId'])).data.name,

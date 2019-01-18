@@ -74,7 +74,7 @@ export default {
         }        
     },
     changeCard(book) {
-      alert(book)
+
       let tabs = 0
       this.$emit('input', tabs)
     }
@@ -123,9 +123,6 @@ export default {
         const resultsApi = (await BookService.searchApi(this.search)).data  //search the db for books with same title
         for (var i = 0; i < resultsApi.length; i++){
           var obj = resultsApi[i]
-          //alert(JSON.stringify(obj))
-         // alert('cqdqdq'+obj['title'])
-          // var BookId = obj['id']
           const cenas = Buffer.from(JSON.stringify(obj)).toString('base64')
           var URL = `http://localhost:8080/add-book/api/${cenas}`
           let authorsString = ''
@@ -151,7 +148,6 @@ export default {
               obj['thumbnail']
           )
           this.bookListApi.push(newBookApi)       //add new book to the array
-         // alert(obj['title']+URL)
         }
       }
       

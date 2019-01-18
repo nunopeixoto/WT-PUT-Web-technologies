@@ -11,10 +11,10 @@
                     <v-text-field label="Library name"  required :rules="[required]" v-model="library.name"></v-text-field>
                 </v-flex>
                 
-                <v-alert v-if="success" :value="true" type="success">
+                <v-alert outline v-if="success" :value="true" type="success">
                   {{success}}.
                 </v-alert>
-                <v-alert  v-if="error" :value="true" type="error">
+                <v-alert outline  v-if="error" :value="true" type="error">
                  {{error}}
                 </v-alert>
                 <v-flex xs12 text-xs-right>

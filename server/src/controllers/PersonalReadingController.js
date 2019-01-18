@@ -29,8 +29,6 @@ module.exports = {
     async getPersonalReadingByLibraryUser(req, res) {
       try {
         const user = req.params.UserId
-        console.log(user)
-        console.log(req.params.LibraryId)
           let PersonalReadings = null
           //if param libraryId comes as 0 it means we have to send all personal readings of the user
           if (req.params.LibraryId == 0){
@@ -108,10 +106,8 @@ module.exports = {
           {id: req.params.personalReadingId}
         })
         res.send(newPersonalReading)
-      }
-      console.log('heqyeqwuweque')     
+      }    
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error updating personal reading.'
       })
@@ -127,7 +123,6 @@ module.exports = {
       })
       res.send(updatedPersonalReading) 
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error updating personal reading.'
       })
@@ -142,7 +137,6 @@ module.exports = {
 
       res.send(lastFinishedPersonalReading)
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error finding last finished book.'
       })
@@ -158,7 +152,6 @@ module.exports = {
 
       res.send(currentlyReadingPersonalReading)
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error finding current book.'
       })
@@ -183,7 +176,6 @@ module.exports = {
         totalBooks: findAllBooks.count
       })
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error finding current book.'
       })
@@ -235,7 +227,6 @@ module.exports = {
         }
        })
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error finding current book.'
       })

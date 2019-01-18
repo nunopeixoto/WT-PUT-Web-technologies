@@ -3,7 +3,7 @@
   <v-container fill-height fluid grid-list-xl>
     <v-layout justify-center wrap>
       <v-flex xs12 md8>
-        <material-card color="green" title="Register">
+        <material-card color="green" title="Insert new loan">
           <v-form>
             <v-container py-0>  
                 <v-layout wrap>
@@ -13,17 +13,17 @@
                   <v-flex xs12 md6>
                     <v-select :items="optionsTo"  v-model="selectTo" label="To"></v-select>
                   </v-flex>
-                  <v-flex xs12 md6>
+                  <v-flex xs12 md6 v-if="(!lenterIsUser && lenterIsUser != null) || this.selectFrom=='Me'">
                     <v-text-field label="From"  v-if="!lenterIsUser && lenterIsUser != null"  placeholder="Person name and surname" required :rules="[required]" type="text" v-model="Loan.externalUserName"></v-text-field>    
                     <v-text-field label="From"  v-if="this.selectFrom=='Me'" v-model="userLoggedInUsername" disabled type="text" ></v-text-field>        
                   </v-flex>
-                  <v-flex xs12 md6>
+                  <v-flex xs12 md6 v-if="borrowerIsUser || (!borrowerIsUser && borrowerIsUser != null) || this.selectTo=='Me'" >
                     <v-text-field label="To"  v-if="borrowerIsUser" placeholder="User e-mail or @username" required :rules="[required]" type="text" v-model="Loan.UserBorrowerUsernameOrEmail"></v-text-field>
                     <v-text-field label="To" v-if="!borrowerIsUser && borrowerIsUser != null" placeholder="Person name and surname" required :rules="[required]" type="text" v-model="Loan.externalUserName"></v-text-field>
                     <v-text-field label="From"  v-if="this.selectTo=='Me'" v-model="userLoggedInUsername" disabled type="text" ></v-text-field>
                   </v-flex>
-                  <v-flex xs12 md12>
-                    <v-autocomplete v-if="selectFrom=='Me'" v-model="bookNamesSelect" :items="Books" :label="`Book`" persistent-hint>
+                  <v-flex xs12 md12 v-if="selectFrom=='Me'">
+                    <v-autocomplete v-model="bookNamesSelect" :items="Books" :label="`Book`" persistent-hint>
                     <v-slide-x-reverse-transition slot="append-outer" mode="out-in">
                     </v-slide-x-reverse-transition>
                     </v-autocomplete>
@@ -37,19 +37,20 @@
                   <v-text-field slot="activator" v-model="Loan.startDate" label="Start date" prepend-icon="event" readonly></v-text-field>
                   <v-date-picker v-model="Loan.startDate" @input="datepickerStart = false"></v-date-picker>
                 </v-menu>
-               </v-flex>            
-                <br>
-                <v-alert v-if="success" :value="true" type="success">
+               </v-flex>
+                <v-flex xs12 md6></v-flex>           
+              
+                <v-alert outline v-if="success" :value="true" type="success">
                 {{success}}.
                 </v-alert>
-                <v-alert  v-if="error" :value="true" type="error">
+                <v-alert outline  v-if="error" :value="true" type="error">
                 {{error}}
                 </v-alert>
-                <br>
-                <v-flex xs12 text-xs-right>
+              
+              <v-flex xs12 text-xs-right>
                 <v-btn color="success" v-if="!lenterIsUser && lenterIsUser != null" dark @click="dialogBook = true">Edit book </v-btn> 
-                    <v-btn color="success" @click="addLoan"> Submit </v-btn>
-                    </v-flex>
+                <v-btn color="success" @click="addLoan"> Submit </v-btn>
+              </v-flex>
               <v-dialog v-model="dialogBook" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
                 <v-card tile>
                 <v-toolbar card dark color="primary">
@@ -227,6 +228,9 @@
       // }
     },
     watch: {
+        'bookNamesSelect': function (newVal) {
+          alert('hey')
+        },
         'selectFrom': async function(newVal) {
             if (this.selectTo == newVal){
                 this.selectFrom = ''

@@ -45,7 +45,6 @@ module.exports = {
       })
       res.send(loansUser)
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error finding user\'s loans.'
       })  

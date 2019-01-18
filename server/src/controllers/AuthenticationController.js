@@ -56,7 +56,7 @@ module.exports = {
       }
       if (user==null){
         res.status(400).send({
-          error: 'The username or e-mail you are typing does not exist. Do not forget to put @ before the username. '
+          error: 'The username you are typing does not exist. Do not forget to put @ before the username. '
         })
       }
       res.send(user)
@@ -76,7 +76,6 @@ module.exports = {
       
       res.send(user)
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'Error finding user.'
       })
@@ -106,7 +105,7 @@ module.exports = {
       const url = `http://localhost:8081/confirmation/${token}`
 
       let HelperOptions = {
-        from: '"CompanyName" peixotobusiness@gmail.com',
+        from: '"myLibrary" peixotobusiness@gmail.com',
         to: req.body.email,
         subject: 'Account validation',
         html: `Please click this email to confirm your email: <a href="${url}">${url}</a>`,
@@ -115,12 +114,11 @@ module.exports = {
 
       transporter.sendMail(HelperOptions, (error, info) => {
         if (error){
-            return console.log(error)
+          console.log(info)
+          return console.log(error)
         }
-        console.log(info)
       })
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'This email account is already in use.'
       })
@@ -136,7 +134,6 @@ module.exports = {
         token: token
       })
     } catch (err) {
-      console.log(err)
       res.status(400).send({
         error: 'This email account is already in use.'
       })

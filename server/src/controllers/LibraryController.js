@@ -33,7 +33,6 @@ module.exports = {
      const library = await Library.create(req.body)
      res.send(library)
     } catch (err) {
-      console.log(err)
       res.status(500).send({
         error: 'An error has occured trying to create a library'
       })
@@ -66,8 +65,6 @@ module.exports = {
           if (error){
             return console.log(error)
           }
-          console.log('message sent')
-          console.log(info)
         })
 
 
@@ -96,7 +93,6 @@ module.exports = {
           res.send(libraryNames)
         })
     } catch (err) {
-      console.log(err)
       res.status(500).send({
         error: 'An error has occured trying get all user librarys.'
       })
@@ -111,7 +107,6 @@ module.exports = {
       })
       res.send(library)
     } catch (err) {
-      console.log(err)
       res.status(500).send({
         error: 'An error has occured trying get all user librarys.'
       })
@@ -126,7 +121,6 @@ module.exports = {
       })
       res.send(library)
     } catch (err) {
-      console.log(err)
       res.status(500).send({
         error: 'An error has occured trying get all user librarys.'
       })
@@ -134,7 +128,6 @@ module.exports = {
   },  
   async userAcepted(req, res) {
     try {
-      console.log('dwqdwwdqwdqwdqwdqwdqwdqwdqwdqwdqwqd'+req.params.email)
       //verify if user is already in db
       var email = decodeURIComponent(req.params.email)
       const userExists = await User.findOne({
@@ -146,7 +139,6 @@ module.exports = {
      if(userExists){
         const userJson = userExists.toJSON()
         //verify on libraryInvitations table 
-        console.log('111111111111111111111111111111111111111111')
         const userAlreadyInLibrary = await LibraryInvitations.findOne({
           where : {
             UserId : userJson.id
@@ -175,7 +167,6 @@ module.exports = {
             }
         }
        else {
-        console.log('666666666666666666666666666666666666666666666666')
         res.setHeader('Access-Control-Allow-Origin', '*')
         return res.redirect(`http://localhost:8080/register-enhanced/${req.params.email}/${req.params.libraryId}`)
       }

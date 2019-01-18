@@ -18,5 +18,11 @@ export default {
   },
   getLibraryById (id) {
     return Api().get(`/library/getLibraryById/${id}`)
+  },
+  getAllLibraryInvitationsByLibraryId (id) {
+    return Api().get(`/getAllLibraryInvitationsByLibraryId/${id}`)
+  },
+  removeUserFromLibrary (LibraryId, UserId) {
+    return Api().post(`/removeUserFromLibrary/${LibraryId}/${UserId}`)
   }
 }

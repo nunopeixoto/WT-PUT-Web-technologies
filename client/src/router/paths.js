@@ -16,7 +16,7 @@ export default [
   },
   {
     path: '/register-enhanced/:email/:libraryId',
-    name: 'Register Enhanced',
+    name: 'Register',
     view: 'RegisterEnhanced'
   },
   {
@@ -61,7 +61,7 @@ export default [
   },
   {
     path: '/your-books',
-    name: 'Your books',
+    name: 'Manage your books',
     view: 'YourBooks'
   },
   {

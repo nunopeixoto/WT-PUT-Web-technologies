@@ -6,10 +6,10 @@
   <v-container fill-height fluid grid-list-xl>
     <v-layout wrap>
       <v-snackbar color="success"  :top="top" v-model="snackbar" dark>
-              <!-- <v-icon color="white" class="mr-3">mdi-bell-plus</v-icon> -->
-              <div>Hello <b>@{{this.$store.state.user.username}}</b>! Welcome to myLibrary app. </div>
-              <v-icon size="16" @click="snackbar = false">mdi-close-circle</v-icon>
-            </v-snackbar>
+        <!-- <v-icon color="white" class="mr-3">mdi-check</v-icon> -->
+        <div>Hello <b>@{{this.$store.state.user.username}}</b>! Welcome to myLibrary app. </div>
+        <v-icon size="16" @click="snackbar = false">mdi-close-circle</v-icon>
+      </v-snackbar>
       <!-- <v-flex
               md12
               sm12
@@ -440,7 +440,8 @@
             this.lastFinishedBook.endDate = 'None'
           }
         } catch (err) {
-          alert(err)
+         
+         alert(err)
         }
       },
       async findCurrentlyReadingBook(){

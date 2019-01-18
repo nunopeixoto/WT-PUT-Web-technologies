@@ -25,25 +25,28 @@ module.exports = (app) => {
   app.get('/confirmation/:token', 
     AuthenticationController.validate)
 
-  app.post('/library',
-    LibraryController.create)
-  app.get('/library/getAll',
-    LibraryController.getAll)
-  app.post('/library/invite',
-    LibraryController.invite)
-  app.get('/library/getLibrary/:name',
-    LibraryController.getLibraryByName)
-  app.get('/library/getLibraryById/:id',
-    LibraryController.getLibraryById)
-  app.get('/library/invite/:email/:libraryId', 
-    LibraryController.userAcepted)
-  app.get('/library/getUserLibrarys/:userId', 
-    LibraryController.getUserLibrarys)  
+app.post('/library',
+  LibraryController.create)
+app.get('/library/getAll',
+  LibraryController.getAll)
+app.post('/library/invite',
+  LibraryController.invite)
+app.get('/library/getLibrary/:name',
+  LibraryController.getLibraryByName)
+app.get('/library/getLibraryById/:id',
+  LibraryController.getLibraryById)
+app.get('/library/invite/:email/:libraryId', 
+  LibraryController.userAcepted)
+app.get('/library/getUserLibrarys/:userId', 
+  LibraryController.getUserLibrarys)   
   
 
 app.get('/getAllLibraryInvitations',
   LibraryInvitationsController.getAllLibraryInvitations)
-
+app.get('/getAllLibraryInvitationsByLibraryId/:LibraryId',
+  LibraryInvitationsController.getAllLibraryInvitationsByLibraryId)
+app.post('/removeUserFromLibrary/:LibraryId/:UserId',
+  LibraryInvitationsController.removeUserFromLibrary)
 app.get('/books/getBooks',
   BookController.getBooks)
 app.get('/books/getBook/:id',

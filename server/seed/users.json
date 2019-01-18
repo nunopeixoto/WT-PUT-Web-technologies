@@ -1,24 +1,36 @@
 [
     {
         "email": "nuno_peixoto1997@hotmail.com",
+        "name": "Nuno",
+        "surname": "Peixito",
+        "birthDate": "1997-29-10",
         "username": "nunopeixoto",
         "password": "12345678",
         "confirmed": true
     },
     {
-        "email": "peixotobife@gmail.com",
-        "username": "peixotobife",
+        "email": "1441@gmail.com",
+        "name": "Nuno",
+        "surname": "Peixito",
+        "birthDate": "1997-29-10",
+        "username": "12",
         "password": "12345678",
         "confirmed": true
     },
     {
-        "email": "mt2portugalia@outlook.com",
-        "username": "mt2portugalia",
+        "email": "ca@outlook.com",
+        "name": "Tony",
+        "surname": "Stark",
+        "birthDate": "1997-29-10",
+        "username": "as",
         "password": "12345678",
         "confirmed": true
     },
     {
         "email": "213",
+        "name": "Joao",
+        "surname": "Oliveira",
+        "birthDate": "1997-29-10",
         "username": "test",
         "password": "12345678",
         "confirmed": false,

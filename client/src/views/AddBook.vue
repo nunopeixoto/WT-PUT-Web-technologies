@@ -82,14 +82,12 @@
                     </v-dialog>  
                 </v-flex>
                 <br><br>
-                <v-flex xs6 text-xs-center>
-                <v-alert v-if="success" :value="true" type="success">
+                <v-alert outline v-if="success" :value="true" type="success">
                   {{success}}.
                 </v-alert>
-                <v-alert  v-if="error" :value="true" type="error">
+                <v-alert outline  v-if="error" :value="true" type="error">
                   {{error}}
                 </v-alert>
-                </v-flex>
                 <br>
                 <v-flex xs12 text-xs-right>
                 <v-btn color="success" @click="dialog = true">
@@ -115,7 +113,7 @@
             <!-- book auto -->
             <v-tab-item :key="1">
                 <panel title="Add book automatically">
-                  <v-form><br>
+                  <br>
                     <v-layout wrap>
                     <v-flex xs12 md4>
                     </v-flex>
@@ -159,7 +157,6 @@
                             </v-expansion-panel-content>
                         </v-expansion-panel>
                         </v-flex>
-                  </v-form>
                 </panel>
             </v-tab-item>
           </v-tabs-items>

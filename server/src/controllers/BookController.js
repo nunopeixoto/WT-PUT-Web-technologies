@@ -61,7 +61,6 @@ module.exports = {
       res.send(newBookJson)
       }
     } catch (err) {
-        console.log(err)
       res.status(400).send({
         error: 'Error creating book.'
       })

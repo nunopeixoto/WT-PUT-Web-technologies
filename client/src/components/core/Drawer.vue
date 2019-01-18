@@ -58,9 +58,9 @@
           </v-list-tile>
           <v-list-tile  v-if="this.$store.state.isUserLoggedIn && (this.$store.state.userHasLibrary || this.$store.state.userIsPartOfLibrary)" to="/your-books" :active-class="color" avatar class="v-list-item">
             <v-list-tile-action>
-              <v-icon>mdi-book-plus</v-icon>
+              <v-icon>mdi-book-open-page-variant</v-icon>
             </v-list-tile-action>
-            <v-list-tile-title>Your books</v-list-tile-title>
+            <v-list-tile-title>Manage your books</v-list-tile-title>
           </v-list-tile>
           <v-list-tile  v-if="this.$store.state.isUserLoggedIn && (this.$store.state.userHasLibrary || this.$store.state.userIsPartOfLibrary)" to="/add-loan" :active-class="color" avatar class="v-list-item">
             <v-list-tile-action>
