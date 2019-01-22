@@ -172,15 +172,18 @@
       },
       async deleteItem (item) {
         const index = this.users.indexOf(item)
-        const response = (await LibraryService.removeUserFromLibrary(this.$store.state.library.id, item.userId)).data
-        if (response) {
-          confirm(`Are you sure you want to delete @${item.username} from your library?`) && this.users.splice(index, 1)
-          this.color = "success"
-          this.snackbarError = false
-          this.snackbarSuccess = true
-          this.snackbarMessage = "User deleted successfully."
-          this.snackbar= true
-        }
+
+          var r = confirm(`Are you sure you want to delete @${item.username} from your library?`) && this.users.splice(index, 1)
+          if (r) {
+            const response = (await LibraryService.removeUserFromLibrary(this.$store.state.library.id, item.userId)).data
+            if (response) {
+              this.color = "success"
+              this.snackbarError = false
+              this.snackbarSuccess = true
+              this.snackbarMessage = "User deleted successfully."
+              this.snackbar= true
+            }
+          }
       }
     },
     async mounted () {

@@ -10,85 +10,7 @@
         <div>Hello <b>@{{this.$store.state.user.username}}</b>! Welcome to myLibrary app. </div>
         <v-icon size="16" @click="snackbar = false">mdi-close-circle</v-icon>
       </v-snackbar>
-      <!-- <v-flex
-              md12
-              sm12
-              lg4
-            >
-              <material-chart-card
-                :data="dailySalesChart.data"
-                :options="dailySalesChart.options"
-                color="info"
-                type="Line"
-              >
-                <h4 class="title font-weight-light">Daily Sales</h4>
-                <p class="category d-inline-flex font-weight-light">
-                  <v-icon
-                    color="green"
-                    small
-                  >
-                    mdi-arrow-up
-                  </v-icon>
-                  <span class="green--text">55%</span>&nbsp;
-                  increase in today's sales
-                </p>
-      
-                <template slot="actions">
-                  <v-icon
-                    class="mr-2"
-                    small
-                  >
-                    mdi-clock-outline
-                  </v-icon>
-                  <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
-</template>
-        </material-chart-card>
-      </v-flex>
-      <v-flex
-        md12
-        sm12
-        lg4
-      >
-        <material-chart-card
-          :data="emailsSubscriptionChart.data"
-          :options="emailsSubscriptionChart.options"
-          :responsive-options="emailsSubscriptionChart.responsiveOptions"
-          color="red"
-          type="Bar"
-        >
-          <h4 class="title font-weight-light">Email Subscription</h4>
-          <p class="category d-inline-flex font-weight-light">Last Campaign Performance</p>
 
-<template slot="actions">
-  <v-icon class="mr-2" small>
-    mdi-clock-outline
-  </v-icon>
-  <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-</template>
-        </material-chart-card>
-      </v-flex>
-      <v-flex
-        md12
-        sm12
-        lg4
-      >
-        <material-chart-card
-          :data="dataCompletedTasksChart.data"
-          :options="dataCompletedTasksChart.options"
-          color="green"
-          type="Line"
-        >
-          <h3 class="title font-weight-light">Completed Tasks</h3>
-          <p class="category d-inline-flex font-weight-light">Last Last Campaign Performance</p>
-
-<template slot="actions">
-  <v-icon class="mr-2" small>
-    mdi-clock-outline
-  </v-icon>
-  <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
-</template>
-        </material-chart-card>
-      </v-flex> -->
       <!-- stats card -->
       <v-flex sm6 xs12 md6 lg3 >
         <material-stats-card color="info" icon="mdi-book-open" title="Average pages read per day" :value="this.averageBooksCard.averagePagesDay" sub-icon="mdi-update" :sub-text="this.averageBooksCard.averagePagesMonth"/>
@@ -129,66 +51,6 @@
         </material-card>
       </v-flex>
     </v-layout>
-   <!-- <v-dialog v-model="dialogReading" max-width="700px">
-          <v-card>
-            <v-card-title>
-              <span class="headline">Change the read status of {{editedItem.title}}</span>
-            </v-card-title>
-  
-            <v-card-text>
-              <v-container grid-list-md>
-                <v-layout wrap>
-                  <v-flex xs12 sm6 md4>
-                    <!-- <v-text-field v-model="editedItem.reading" label="Calories"></v-text-field> 
-                          <v-select v-model="editedItem.reading" v-bind:items="this.optionsRead" label="Read status" ></v-select>
-                          <v-dialog ref="dialogStart" v-if="editedItem.reading=='Reading in progress'" v-model="modalStart" :return-value.sync="date" persistent lazy full-width width="290px">
-                      <v-text-field slot="activator" v-model="date" label="Started in" prepend-icon="event" readonly></v-text-field>
-                      <v-date-picker v-model="date" scrollable>
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="modalStart = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.dialogStart.save(date)">OK</v-btn>
-                      </v-date-picker>
-                    </v-dialog>
-                    <v-dialog ref="dialogEnd" v-if="editedItem.reading=='Finished'" v-model="modalEnd" :return-value.sync="date" persistent lazy full-width width="290px">
-                      <v-text-field slot="activator" v-model="date" label="Finished in" prepend-icon="event" readonly></v-text-field>
-                      <v-date-picker v-model="date" scrollable>
-                        <v-spacer></v-spacer>
-                        <v-btn flat color="primary" @click="modalEnd = false">Cancel</v-btn>
-                        <v-btn flat color="primary" @click="$refs.dialogEnd.save(date)">OK</v-btn>
-                      </v-date-picker>
-                    </v-dialog>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat @click="closeDialogReading">Cancel</v-btn>
-              <v-btn color="blue darken-1" flat @click="saveReading">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-    </v-dialog>
-    <v-dialog v-model="dialogComment" max-width="900px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Comment {{editedItem.title}}</span>
-        </v-card-title>
-         <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12 md12>
-                <v-textarea v-model="editedItem.comment" label="Comment"></v-textarea>
-              </v-flex>
-            </v-layout>
-          </v-container>
-         </v-card-text>
-         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click="closeDialogComment">Cancel</v-btn>
-          <v-btn color="blue darken-1" flat @click="saveComment">Save</v-btn>
-         </v-card-actions>
-        </v-card>
-        </v-dialog> -->
   </v-container>
 </template>
 
@@ -234,80 +96,75 @@
           startDate: '',
           endDate: ''
         },
-        // dailySalesChart: {
-        //   data: {
-        //     labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-        //     series: [
-        //       [12, 17, 7, 17, 23, 18, 38]
-        //     ]
-        //   },
-        //   options: {
-        //     lineSmooth: this.$chartist.Interpolation.cardinal({
-        //       tension: 0
-        //     }),
-        //     low: 0,
-        //     high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-        //     chartPadding: {
-        //       top: 0,
-        //       right: 0,
-        //       bottom: 0,
-        //       left: 0
-        //     }
-        //   }
-        // },
-        // dataCompletedTasksChart: {
-        //   data: {
-        //     labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
-        //     series: [
-        //       [230, 750, 450, 300, 280, 240, 200, 190]
-        //     ]
-        //   },
-        //   options: {
-        //     lineSmooth: this.$chartist.Interpolation.cardinal({
-        //       tension: 0
-        //     }),
-        //     low: 0,
-        //     high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-        //     chartPadding: {
-        //       top: 0,
-        //       right: 0,
-        //       bottom: 0,
-        //       left: 0
-        //     }
-        //   }
-        // },
-        // emailsSubscriptionChart: {
-        //   data: {
-        //     labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
-        //     series: [
-        //       [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-  
-        //     ]
-        //   },
-        //   options: {
-        //     axisX: {
-        //       showGrid: false
-        //     },
-        //     low: 0,
-        //     high: 1000,
-        //     chartPadding: {
-        //       top: 0,
-        //       right: 5,
-        //       bottom: 0,
-        //       left: 0
-        //     }
-        //   },
-        //   responsiveOptions: [
-        //     ['screen and (max-width: 640px)', {
-        //       seriesBarDistance: 5,
-        //       axisX: {
-        //         labelInterpolationFnc: function (value) {
-        //           return value[0]
-        //         }
-        //       }
-        //     }]
-        //   ]
-        // },
+        dailySalesChart: {
+          data: {
+            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            series: [[542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]]
+          },
+          options: {
+            lineSmooth: this.$chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+            low: 0,
+            high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            chartPadding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            }
+          }
+        },
+        dataCompletedTasksChart: {
+          data: {
+            labels: ['12am', '3pm', '6pm', '9pm', '12pm', '3am', '6am', '9am'],
+            series: [
+              [230, 750, 450, 300, 280, 240, 200, 190]
+            ]
+          },
+          options: {
+            lineSmooth: this.$chartist.Interpolation.cardinal({
+              tension: 0
+            }),
+            low: 0,
+            high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
+            chartPadding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+            }
+          }
+        },
+        emailsSubscriptionChart: {
+          data: {
+            labels: ['Ja', 'Fe', 'Ma', 'Ap', 'Mai', 'Ju', 'Jul', 'Au', 'Se', 'Oc', 'No', 'De'],
+            series: []
+          },
+          options: {
+            axisX: {
+              showGrid: false
+            },
+            low: 0,
+            high: 1000,
+            chartPadding: {
+              top: 0,
+              right: 5,
+              bottom: 0,
+              left: 0
+            }
+          },
+          responsiveOptions: [
+            ['screen and (max-width: 640px)', {
+              seriesBarDistance: 5,
+              axisX: {
+                labelInterpolationFnc: function (value) {
+                  return value[0]
+                }
+              }
+            }]
+          ]
+      },
         headers: [{
             class: 'idcolumn',
             sortable: true,

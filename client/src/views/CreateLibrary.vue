@@ -81,9 +81,8 @@
             this.$store.dispatch('setLibrary', response.data)
             this.$store.dispatch('setHasLibrary', true)
             this.dialog = false
-            
-            this.success = `${response.data.name} has been created`
 
+            this.success = `${response.data.name} has been created`
           } catch (error) {
             alert(error)
             this.success = null

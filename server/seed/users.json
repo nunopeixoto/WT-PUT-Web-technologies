@@ -9,31 +9,12 @@
         "confirmed": true
     },
     {
-        "email": "1441@gmail.com",
-        "name": "Nuno",
-        "surname": "Peixito",
-        "birthDate": "1997-29-10",
-        "username": "12",
-        "password": "12345678",
-        "confirmed": true
-    },
-    {
-        "email": "ca@outlook.com",
+        "email": "mt2portugalia@outlook.com",
         "name": "Tony",
         "surname": "Stark",
         "birthDate": "1997-29-10",
-        "username": "as",
+        "username": "mt2portugalia",
         "password": "12345678",
         "confirmed": true
-    },
-    {
-        "email": "213",
-        "name": "Joao",
-        "surname": "Oliveira",
-        "birthDate": "1997-29-10",
-        "username": "test",
-        "password": "12345678",
-        "confirmed": false,
-        "createdAt": "2019-01-05T17:49:45.135Z"
     }
 ]

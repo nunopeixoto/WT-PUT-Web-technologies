@@ -1,6 +1,15 @@
 /* eslint-disable */
 const {PersonalReading} = require('../models')
 const {Book} = require('../models')
+const Sequelize = require('sequelize')
+const config = require('../config/config')
+const sequelize = new Sequelize(
+  config.db.database,
+  config.db.user,
+  config.db.password,
+  config.db.options
+)
+
 module.exports = {
   async getAllPersonalReading(req, res) {
     try {
@@ -183,34 +192,38 @@ module.exports = {
   },
   async findAverages (req, res) {
     try {
-      const Sequelize = require('sequelize')
-      const config = require('../config/config')
       const userId = req.params.UserId
-      const sequelize = new Sequelize(
-        config.db.database,
-        config.db.user,
-        config.db.password,
-        config.db.options
-      )
-
       var nrPages = 0
       var nrDays = 0
       var nrMonths = 0
-      const books = await Book.findAll({
+      const response = (await PersonalReading.findAll({
         where : {
-          id: userId
+          UserId : userId,
+          reading: 1
         }
-      })
-      
-     books.forEach(function(obj){
+      }))
+      var books = []
+      for (var i = 0; i < response.length; i++) {
+        var obj = response[i]
+        let book = await Book.findOne({
+          where : {
+            id: obj.BookId
+          }
+        })
+        books.push(book)
+      }
+
+      for (var i = 0; i < books.length; i++) {
+        var obj = books[i]
        nrPages += obj.nrPages
-     })
+      }
+       
      sequelize.query(`SELECT SUM((julianday(endDate) - julianday(startDate))) AS nrDays FROM PersonalReadings where reading = 1 AND UserId = ${userId};`, { type: sequelize.QueryTypes.SELECT})
        .then(function(result) {
          nrDays = result[0].nrDays
          if (nrDays) {
           nrMonths = (nrDays / 30).toFixed(2)
-          averagePagesMonth = +((nrPages / nrMonths).toFixed(2))
+          averagePagesMonth = +((nrPages / nrMonths).toFixed(0))
           res.send({
             nrDays: nrDays,
             nrPages: nrPages,
@@ -227,6 +240,7 @@ module.exports = {
         }
        })
     } catch (err) {
+      console.log(err)
       res.status(400).send({
         error: 'Error finding current book.'
       })

@@ -1,7 +1,7 @@
 [
     {
         "reading": 0,
-        "comment": "cenas",
+        "comment": "Really need to read this one.",
         "startDate": null,
         "endDate": null,
         "UserId": 1,
@@ -9,37 +9,20 @@
         "BookId": 1
     },
     {
-        "reading": 0,
-        "comment": "cenweqqqqqqqqqqqqqqs1cenweqqqqqqqqqqqqqqs1cenweqqqqqqqqqqqqqqs1",
-        "startDate": null,
-        "endDate": null,
+        "reading": 1,
+        "comment": "Nice book.",
+        "startDate": "2019-01-01",
+        "endDate": "2019-01-15",
         "UserId": 1,
         "LibraryId": 1,
         "BookId": 2
     },
     {
-        "reading": 0,
-        "comment": "cenas2",
-        "startDate": null,
+        "reading": 2,
+        "startDate": "2019-01-01",
         "endDate": null,
         "UserId": 1,
         "LibraryId": 1,
-        "BookId": 3
-    },
-    {
-        "reading": 0,
-        "startDate": null,
-        "endDate": null,
-        "UserId": 2,
-        "LibraryId": 1,
-        "BookId": 2
-    },
-    {
-        "reading": 0,
-        "startDate": null,
-        "endDate": null,
-        "UserId": 2,
-        "LibraryId": 2,
         "BookId": 3
     }
 ]

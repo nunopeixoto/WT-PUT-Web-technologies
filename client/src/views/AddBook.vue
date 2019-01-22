@@ -2,6 +2,16 @@
 <template>
   <v-container fill-height fluid grid-list-xl>
     <v-layout justify-center wrap>
+      <v-snackbar color="success"  top v-model="snackbar" dark>
+        <!-- <v-icon color="white" class="mr-3">mdi-check</v-icon> -->
+        <div>Book added to your library. </div>
+        <v-icon size="16" @click="snackbar = false">mdi-close-circle</v-icon>
+      </v-snackbar>
+      <v-snackbar color="error"  top v-model="snackbarErr" dark>
+        <!-- <v-icon color="white" class="mr-3">mdi-check</v-icon> -->
+        <div> {{this.errtext}}</div>
+        <v-icon size="16" @click="snackbarErr = false">mdi-close-circle</v-icon>
+      </v-snackbar>
       <v-flex xs12 md10>
           <material-card class="card-tabs" color="green">
           <v-flex slot="header">
@@ -81,14 +91,14 @@
                       </v-date-picker>
                     </v-dialog>  
                 </v-flex>
-                <br><br>
                 <v-alert outline v-if="success" :value="true" type="success">
                   {{success}}.
                 </v-alert>
+                <v-flex xs12 md4>
                 <v-alert outline  v-if="error" :value="true" type="error">
                   {{error}}
                 </v-alert>
-                <br>
+                </v-flex>
                 <v-flex xs12 text-xs-right>
                 <v-btn color="success" @click="dialog = true">
                   Submit
@@ -177,6 +187,9 @@ import _ from 'lodash'
 
 export default {
     name: 'add-book',
+    snackbar: false,
+    snackbarErr: false,
+    errtext: null,
     components: {
         BookManually,
         Datepicker,
@@ -224,7 +237,8 @@ export default {
             .keys(this.book)
             .every(key => !!this.book[key])
             if (!areAllFieldsFilledIn){
-              this.error= 'Please fill all the required fields'
+              this.snackbarErr = true
+              this.errtext= 'Please fill all the required fields'
               this.dialog = false
               return
             }
@@ -264,7 +278,7 @@ export default {
             })
             
             }
-            this.success = `${this.book.title} added to your library`
+            this.snackbar = true
             this.dialog = false
             this.book.title = ' '
             this.book.subtitle = ' '
@@ -278,7 +292,9 @@ export default {
           } catch (error) {
             this.success = null
             this.dialog = false
-            this.error = error.response.data.error
+            this.errtext = error.response.data.error
+            this.snackbarErr = true
+            //this.error = error.response.data.error
           }
         },
        async find() {
